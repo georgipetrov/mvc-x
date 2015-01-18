@@ -17,17 +17,17 @@ Supported views are index, view, edit, add. When used in the latter two views, t
 
 Using MVC-X fluent queries you can retrieve your specific desired data. It follows the model of $this->modelName->getColumnsByCriteria(). Example usage:
 
-`$this->blog->getAllBlog(); // Returns all the blog posts i.e. all entries from the 'blog' table`
+`$this->blog->getAll(); // Returns all the blog posts i.e. all entries from the 'blog' table`
 
-`$this->blog->getAllBlogById(5); // Returns the blog post with id equal to 5`
+`$this->blog->getAllById(5); // Returns the blog post with id equal to 5`
 
-`$this->blog->getAllBlogByContent('%hurricane%'); // Returns a list of blog posts who have the word 'hurricane' in its content`
+`$this->blog->getAllByContent('%hurricane%'); // Returns a list of blog posts who have the word 'hurricane' in its content`
 
-`$this->blog->getAllBlogByContentAndCreated('%hurricane%','> 2014-01-01'); // Returns a list of blog posts who have the word 'hurricane' in its content, that are created after 2014-01-01`
+`$this->blog->getAllByContentAndCreated('%hurricane%','> 2014-01-01'); // Returns a list of blog posts who have the word 'hurricane' in its content, that are created after 2014-01-01`
 
-`$this->blog->getTitleBlogByUser(12); // Returns a list of blog titles published by user with id = 12`
+`$this->blog->getTitleByUser(12); // Returns a list of blog titles published by user with id = 12`
 
-`$this->blog->getTitleAndContentBlogByUserAndStatus(12, true); // Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12`
+`$this->blog->getTitleAndContentByUserAndStatus(12, true); // Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12`
 
 ##### Database query
 
