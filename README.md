@@ -33,7 +33,7 @@ The following ways of retrieving data are available,
 ##### Auto persistence
 When enabled, this passes your datatabase table data automagically to the view. You enable it in your controller action the following way. 
 
-##### `$this->autoPersist = true;`
+##### <pre>`$this->autoPersist = true;`</pre>
 
 Supported views are index, view, edit, add. When used in the latter two views, this will also automatically store the data if you perform a post request.
 
