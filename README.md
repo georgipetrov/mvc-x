@@ -17,7 +17,7 @@ Supported views are index, view, edit, add. When used in the latter two views, t
 
 Using MVC-X fluent queries you can retrieve your specific desired data. It follows the model of $this->modelName->getColumnsByCriteria(). Example usage:
 
-$this->blog->getAllBlog(); // Returns all the blog posts i.e. all entries from the 'blog' table
+`$this->blog->getAllBlog(); // Returns all the blog posts i.e. all entries from the 'blog' table`
 
 $this->blog->getAllBlogById(5); // Returns the blog post with id equal to 5
 
