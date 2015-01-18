@@ -7,20 +7,20 @@ MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support
 The configuration of each app is in the config.php file in the root of the app, and it looks like,
 
 `array(
-'url'=>array('cartspace.com'),
-'dir'=>'hellotars',
+'url'=>array('mysite.com'),
+'dir'=>'mysiteapp',
 'db' => array(
 	'type'=>'mysql',
 	'host'=>'localhost',
-	'name'=>'cartspac_db',
-	'username'=>'cartspac_user',
-	'password'=>'3ew131s',
+	'name'=>'',
+	'username'=>'',
+	'password'=>'',
 	'table_prefix'=>''
 	),
 'debug_mode'=> 1
 );`
 
- * 	 url - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
+ *   url - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  *   dir - the name of the app directory on your server e.g. mysite
  *   db - the database configuration of the app
  *   debug_mode - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
