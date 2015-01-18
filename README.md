@@ -24,10 +24,10 @@ Returns all the blog posts i.e. all entries from the 'blog' table
 Returns the blog post with id equal to 5
 
 ##### `$this->blog->getAllByContent('%hurricane%');` 
-Returns a list of blog posts who have the word 'hurricane' in its content
+Returns a list of blog posts that have the word 'hurricane' in its content
 
 ##### `$this->blog->getAllByContentAndCreated('%hurricane%','> 2014-01-01');` 
-Returns a list of blog posts who have the word 'hurricane' in its content, that are created after 2014-01-01
+Returns a list of blog posts that have the word 'hurricane' in its content, created after 2014-01-01
 
 ##### `$this->blog->getTitleByUser(12);`
 Returns a list of blog titles published by user with id = 12
@@ -37,7 +37,9 @@ Returns a list of blog titles and content, from blog posts with active status, p
 
 ##### Database query
 
-`$posts = $this->modelName->query('SELECT * FROM blog');`
+A normal query can be accomplished using your DB engine syntax. In this example, we are selecing all blog posts using MySQL. The returned result will be an array of posts.
+
+##### `$posts = $this->blog->query('SELECT * FROM blog');`
 
 #### II. Saving data
 * * *
