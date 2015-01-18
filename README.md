@@ -18,8 +18,7 @@ The configuration of each app is in the config.php file in the root of the app, 
 	'table_prefix'=>''
 	),
 'debug_mode'=> 1
-);`
-<pre>
+);`<pre>
 
  *   url - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  *   dir - the name of the app directory on your server e.g. mysite
