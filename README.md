@@ -42,7 +42,7 @@ array(
  *   debug_mode - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
 
 
-#### II. Retrieving your data
+#### III. Retrieving your data
 * * *
 The following ways of retrieving data are available,
 
@@ -81,7 +81,7 @@ A normal query can be accomplished using your DB engine syntax. In this example,
 
 <pre>$posts = $this->blog->query('SELECT * FROM blog');</pre>
 
-#### III. Saving your data
+#### IV. Saving your data
 * * *
 The following ways of saving data are available,
 
@@ -97,8 +97,17 @@ This saves an array of data, exactly the same way as save(), with the only diffe
 
 Returns the id of the last inserted database table row.
 
+#### V. Database table structure
+* * *
+In order to auto-bind database table to model, you need to have your table under the same name as your model, e.g. blog. While the only required column is `id`, you can make a good use of a few natively populated columns if you have them added. Please find the names of the columns which if you have added you will get them autofilled by MVC-X on each save operation,
 
-#### IV. Debugging
+* `id` - this is the autoincrement primary key of the table
+* `ua` - the useragent of the user performing the save/update request with its browser information
+* `ip` - the ip of the user performign the save/update request, catches IPs behind proxy too
+* `created` - date of entry created
+* `modified` - date of entry modified
+
+#### VI. Debugging
 * * *
 The following techniques are available for debugging.
 
