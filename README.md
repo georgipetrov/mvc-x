@@ -6,7 +6,7 @@ MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support
 
 The configuration of each app is in the config.php file in the root of the app, and it looks like,
 <pre>
-`array(
+array(
 'url'=>array('mysite.com'),
 'dir'=>'mysiteapp',
 'db' => array(
@@ -18,7 +18,7 @@ The configuration of each app is in the config.php file in the root of the app, 
 	'table_prefix'=>''
 	),
 'debug_mode'=> 1
-);`</pre>
+);</pre>
 
  *   url - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  *   dir - the name of the app directory on your server e.g. mysite
@@ -33,7 +33,7 @@ The following ways of retrieving data are available,
 ##### Auto persistence
 When enabled, this passes your datatabase table data automagically to the view. You enable it in your controller action the following way. 
 
-<pre>`$this->autoPersist = true;`</pre>
+<pre>$this->autoPersist = true;</pre>
 
 Supported views are index, view, edit, add. When used in the latter two views, this will also automatically store the data if you perform a post request.
 
@@ -41,43 +41,43 @@ Supported views are index, view, edit, add. When used in the latter two views, t
 
 Using MVC-X fluent queries you can retrieve your specific desired data. It follows the model of $this->modelName->getColumnsByCriteria(). Example usage:
 
-##### `$this->blog->getAll();` 
+<pre>$this->blog->getAll();</pre> 
 Returns all the blog posts i.e. all entries from the 'blog' table
 
-##### `$this->blog->getAllById(5);` 
+<pre>$this->blog->getAllById(5);</pre> 
 Returns the blog post with id equal to 5
 
-##### `$this->blog->getAllByContent('%hurricane%');` 
+<pre>$this->blog->getAllByContent('%hurricane%');</pre> 
 Returns a list of blog posts that have the word 'hurricane' in its content
 
-##### `$this->blog->getAllByContentAndCreated('%hurricane%','> 2014-01-01');` 
+<pre>$this->blog->getAllByContentAndCreated('%hurricane%','> 2014-01-01');</pre> 
 Returns a list of blog posts that have the word 'hurricane' in its content, created after 2014-01-01
 
-##### `$this->blog->getTitleByUser(12);`
+<pre>$this->blog->getTitleByUser(12);</pre>
 Returns a list of blog titles published by user with id = 12
 
-##### `$this->blog->getTitleAndContentByUserAndStatus(12, true);`
+<pre>$this->blog->getTitleAndContentByUserAndStatus(12, true);</pre>
 Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12
 
 ##### Database query
 
 A normal query can be accomplished using your DB engine syntax. In this example, we are selecing all blog posts using MySQL. The returned result will be an array of posts.
 
-##### `$posts = $this->blog->query('SELECT * FROM blog');`
+<pre>$posts = $this->blog->query('SELECT * FROM blog');</pre>
 
 #### III. Saving data
 * * *
 The following ways of saving data are available,
 
-##### `$this->modelName->save($data)`
+<pre>$this->modelName->save($data)</pre>
 
 This will save an array of data having its keys matching the table columns. It can be single entry data or array of entries. If id is present, it will update the data, if not, it will insert it. 
 
-##### `$this->modelName->saveEntry($data)`
+<pre>$this->modelName->saveEntry($data)</pre>
 
 This saves an array of data, exactly the same way as save(), with the only difference it can be used for single entries only.
 
-##### `$this->modelName->lastId()`
+<pre>$this->modelName->lastId()</pre>
 
 Returns the id of the last inserted database table row.
 
@@ -86,13 +86,10 @@ Returns the id of the last inserted database table row.
 * * *
 The following techniques are available for debugging.
 
-##### `pr(mixed $var)`
+<pre>pr(mixed $var)</pre>
 
 This will output a variable, array or object of your choice in well-formatted manner.
 
-##### `debug_mode=>true`
+<pre>debug_mode=>true</pre>
 
 This is a setting in the config.php of your app, which when enabled will produce useful debug information at the bottom of every view.
-
-
-
