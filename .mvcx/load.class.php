@@ -1,53 +1,17 @@
 <?php
 
 class Load {
-	
-	
-	/*
-	* @the registry
-	* @access private
-	*/
 	private $app;
-	
-	/*
-	* @Variables array
-	* @access private
-	*/
 	private $vars = array();
-	
-	/**
-	*
-	* @constructor
-	*
-	* @access public
-	*
-	* @return void
-	*
-	*/
 	function __construct($app) {
 		$this->app = $app;
 	}
-	
-	
-	/**
-	*
-	* @set undefined vars
-	*
-	* @param string $index
-	*
-	* @param mixed $value
-	*
-	* @return void
-	*
-	*/
 	public function __set($index, $value) {
 		$this->vars[$index] = $value;
 	}
-	
 	public function setvars($vars) {
 		$this->vars = $vars;
 	}
-	
 	private function debug($path) {
 		if ($this->app->debug_mode  == 1) {
 			echo('<code style="padding:5px 20px; margin:30px 0 0 0;background: #eee;display:block;">');

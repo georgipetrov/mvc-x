@@ -1,18 +1,11 @@
 <?php
 
 abstract class XController {
+	protected $app;
 	
-	/*
-	 * @registry object
-	 */
-	protected $registry;
-	
-	function __construct($registry) {
-		$this->registry = $registry;
+	function __construct($app) {
+		$this->registry = $app;
 	}
-	
-	/**
-	 * @all controllers must contain an index method
-	 */
+
 	abstract function index();
 }

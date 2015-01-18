@@ -1,15 +1,8 @@
 <?php
 
 class router {
-	/*
-	* @the registry
-	*/
 	private $app;
 	private $load;
-	
-	/*
-	* @the controller path
-	*/
 	public $path;
 	public $args = array();
 	public $x = false;
@@ -24,15 +17,7 @@ class router {
 		$this->load = $load;
 	}
 
-	/**
-	*
-	* @set controller directory path
-	*
-	* @param string $path
-	*
-	* @return void
-	*
-	*/
+
 	function setPath($path) {
 		/*** check if path is a directory ***/
 		if (is_dir($path) == false) {
@@ -46,36 +31,19 @@ class router {
 		header('Location: '.$url);
 	}
 
-
-	/**
-	*
-	* @load the controller
-	*
-	* @access public
-	*
-	* @return void
-	*
-	*/
 	public function loader() {
-		/*** check the route ***/
 		$this->getController();
-		
-		
-		/*** include the controller ***/
 		include $this->file;
-		
-		/*** a new controller class instance ***/
 		$class = ucfirst($this->controller).'Controller';
 		$controller = new $class($this->app, $this->load);
 		$this->controllerObject = $controller;
 
-		/*** check if the action is callable ***/
 		if (is_callable(array($controller, $this->action)) == false) {
 			$action = 'index';
 		} else {
 			$action = $this->action;
 		}
-		/*** run the action ***/
+
 		if (db::table_exists($this->controller)) {
 			$this->app->load->model($this->controller);
 
@@ -149,32 +117,13 @@ class router {
 		return $extension_paths;
 	}
 
-
-	/**
-	*
-	* @get the controller
-	*
-	* @access private
-	*
-	* @return void
-	*
-	*/
 	private function getController() {
-		
-	
-	
-		/*** get the route from the url ***/
 		$route = (empty($_GET['rt'])) ? '' : $_GET['rt'];
 		$route = trim(str_replace($this->app->uri,'',$route),'/');
 		if (empty($route)) {
 			$route = 'page/index';
 		}
-		
-		
 
-		
-
-		/*** get the parts of the route ***/
 		$parts = explode('/', $route);
 		if ($parts[0] == 'x') {
 			if (isset($parts[1])) {
@@ -204,15 +153,12 @@ class router {
 			$this->controller = 'page';
 		}
 	
-		/*** Get action ***/
+
 		if (empty($this->action))
 		{
 			$this->action = 'index';
 		}
-	
-		/*** set the file path ***/
-		
-		//$filepath = $this->path . DS . $this->controller . '.php';
+
 		
 		// graceful loading degradation X > APP > MVC core
 		
