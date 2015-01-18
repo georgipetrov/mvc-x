@@ -2,7 +2,23 @@
 
 MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support and small footprint. It has also SEO-friendly URLs and easy data access.
 
-#### I. Configuration
+#### I. Concept
+
+MVC-X provides a MVC (model-view-controller) architecture well-isolated from X (extensions) and core code (framework). This allows you to achieve powerful webapp scenarios, while keeping the app codebase clean. Two main directories come with the code,
+
+* .mvcx - under-the-hood folder, no touch here
+* apps/ - here you create and implement your applications
+
+Each application has the following directory structure,
+
+* /model - here you create and implement your models, i.e. blog.php
+* /view - here you create and implement your views, i.e. blog/view.tpl, check the cool autoPersist feature below
+* /controller - here you create and implement your controllers, i.e. blog.php
+* /x - here you create and put all the extensions (themes, language, vendors, etc). The extensions can both autoload and load on demand. They can also be separate logic, overrides, pages, everything.
+
+As you noticed, the naming convention is singular lowercased. The name blog in the points above is just for an example, you will notice it in other examples too.
+
+#### II. Configuration
 
 The configuration of each app is in the config.php file in the root of the app, and it looks like,
 <pre>
@@ -26,7 +42,7 @@ array(
  *   debug_mode - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
 
 
-#### II. Retrieving data
+#### II. Retrieving your data
 * * *
 The following ways of retrieving data are available,
 
@@ -65,7 +81,7 @@ A normal query can be accomplished using your DB engine syntax. In this example,
 
 <pre>$posts = $this->blog->query('SELECT * FROM blog');</pre>
 
-#### III. Saving data
+#### III. Saving your data
 * * *
 The following ways of saving data are available,
 
