@@ -1,6 +1,6 @@
 # mvc-x
 
-MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support and small footprint.
+MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support and small footprint. It has also SEO-friendly URLs and easy data access.
 
 #### I. Configuration
 
