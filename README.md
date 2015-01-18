@@ -6,15 +6,15 @@ MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support
 
 MVC-X provides a MVC (model-view-controller) architecture well-isolated from X (extensions) and core code (framework). This allows you to achieve powerful webapp scenarios, while keeping the app codebase clean. Two main directories come with the code,
 
-* .mvcx - under-the-hood folder, no touch here
+* .mvcx/ - under-the-hood folder, no touch here
 * apps/ - here you create and implement your applications
 
 Each application has the following directory structure,
 
-* /model - here you create and implement your models, i.e. blog.php
-* /view - here you create and implement your views, i.e. blog/view.tpl, check the cool autoPersist feature below
-* /controller - here you create and implement your controllers, i.e. blog.php
-* /x - here you create and put all the extensions (themes, language, vendors, etc). The extensions can both autoload and load on demand. They can also be separate logic, overrides, pages, everything.
+* /model/ - here you create and implement your models, i.e. blog.php
+* /view/ - here you create and implement your views, i.e. blog/view.tpl, check the cool autoPersist feature below
+* /controller/ - here you create and implement your controllers, i.e. blog.php
+* /x/ - extensions, here you create and put all the extensions (themes, language, vendors, etc). The extensions can both autoload and load on demand. They can also be separate logic, overrides, pages, everything.
 
 As you noticed, the naming convention is singular lowercased. The name blog in the points above is just for an example, you will notice it in other examples too.
 
