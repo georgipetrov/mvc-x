@@ -5,7 +5,7 @@ MVC-X is a fast multi-app, multi-database MVC with low-coupled extension support
 #### I. Configuration
 
 The configuration of each app is in the config.php file in the root of the app, and it looks like,
-
+<pre>
 `array(
 'url'=>array('mysite.com'),
 'dir'=>'mysiteapp',
@@ -19,6 +19,7 @@ The configuration of each app is in the config.php file in the root of the app, 
 	),
 'debug_mode'=> 1
 );`
+<pre>
 
  *   url - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  *   dir - the name of the app directory on your server e.g. mysite
