@@ -1,3 +1,9 @@
+# App files
+app/cartspace/
+app/admin/
+app/config.php
+dwsync.xml
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

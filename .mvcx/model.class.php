@@ -178,7 +178,6 @@ abstract class Model {
 			$keyvalues = rtrim($keyvalues,',');
 
 			$query = "UPDATE `$db`.`$table` SET $keyvalues WHERE `id`='$id'";
-			pr($query);
 			return $this->query($query);
 		}
 		
