@@ -47,7 +47,7 @@ array(
 The following ways of retrieving data are available,
 
 ##### Auto persistence
-When enabled, this passes your database table data automatically retrieve your data and pass it to the view. You can enable it in your controller action in the following way. 
+When enabled, this automatically retrieves your data and passes it to the view. You can enable it in your controller action in the following way. 
 
 <pre>$this->autoPersist = true;</pre>
 
