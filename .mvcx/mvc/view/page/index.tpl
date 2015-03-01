@@ -1,1 +1,1 @@
-It seems you have not yet created your first app - just do it!
+<h1>This app is missing a view/page/index.tpl file</h1>

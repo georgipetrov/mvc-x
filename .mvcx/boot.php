@@ -10,6 +10,6 @@ include SITE_PATH . '/.mvcx/' . 'app.class.php';
 
 $app = new App;
 
-include SITE_PATH . '/app/' . 'config.php';
+include SITE_PATH . '/.mvcx/' . 'config.php';
 include SITE_PATH . '/.mvcx/' . 'router.class.php';
 include SITE_PATH . '/.mvcx/' . 'load.class.php';
