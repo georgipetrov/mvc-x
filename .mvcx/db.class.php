@@ -16,6 +16,10 @@ class db {
 	
 	public static function query($query) {
 		
+		if (self::$instance == NULL) {
+			return false;	
+		}
+
 		$start = microtime(true);
 		$stmt = self::$instance->query($query);
 		
