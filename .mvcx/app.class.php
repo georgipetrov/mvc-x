@@ -50,7 +50,6 @@ class App {
 		$this->dbconfig = $app['db'];
 		$this->debug_mode = $app['debug_mode'];
 		$this->uri = $this->getAppUriByUrl($app['url']);
-		$this->dbinstance = db::getInstance($app['db']);
 		try {
 			$this->dbinstance = db::getInstance($app['db']);
 		} catch (Exception $e) {
