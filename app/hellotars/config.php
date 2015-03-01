@@ -9,7 +9,7 @@
  */
 
 $config[] = array(
-'url'=>array('hellotars.com'),
+'url'=>array('joro.isenselabs.com/mvc-x'),
 'dir'=>'hellotars',
 'db' => array(
 	'type'=>'mysql',
