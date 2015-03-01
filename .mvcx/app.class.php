@@ -57,13 +57,13 @@ class App {
 		}
 	}
 	
-	public function getAppUriByUrl($url) {
+	private function getAppUriByUrl($url) {
 		$parts = explode(SITE_HOST,$url);
 		$parts[1] = trim($parts[1],'/');
 		return (!empty($parts[1])) ? $parts[1] : '';
 	}
 	
-	private function getAppByUrl($config) {
+	function getAppByUrl($config) {
 		$u = rtrim($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '/');
 		if (empty($u)) {
 			throw new Exception('Invalid URL');

@@ -27,4 +27,5 @@ try {
 
 header('content-type:'.$contentType);
 readfile($asset);
+exit;
 ?>
