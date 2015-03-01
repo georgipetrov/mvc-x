@@ -59,7 +59,8 @@ class Load {
 			return false;
 		}
 		
-		define('BASE_HREF',$this->app->url.'/');
+		if (!defined('BASE_HREF')) define('BASE_HREF',$this->app->url.'/');
+		
 		extract($this->vars);
 		
 		include ($path); 
