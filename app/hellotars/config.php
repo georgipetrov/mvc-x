@@ -9,8 +9,8 @@
  */
 
 $config[] = array(
-'url'=>array('mydomain.com'),
-'dir'=>'myapp',
+'url'=>array('hellotars.com'),
+'dir'=>'hellotars',
 'db' => array(
 	'type'=>'mysql',
 	'host'=>'localhost',
