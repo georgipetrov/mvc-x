@@ -3,6 +3,7 @@ app/cartspace/
 app/admin/
 app/config.php
 dwsync.xml
+config.php
 
 # Windows image file caches
 Thumbs.db
