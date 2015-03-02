@@ -15,15 +15,17 @@ class Load {
 	private function debug($path) {
 		$debug_info = '';
 		if ($this->app->debug_mode  == 1) {
-			$debug_info .= '<code style="padding:5px 20px; margin:30px 0 0 0;background: #eee;display:block;">';
-			$debug_info .= '<pre>DEBUG MODE</pre>';
+			$debug_info .= '<code style="padding:5px 20px; margin:0;border-top:2px dashed #c7254e; display:block;">';
+			$debug_info .= '<h3>DEBUG</h3>';
 
 		
 			foreach (db::$log as $k=> $lg) {
 				$debug_info .= '<pre>'.($k+1)."\t".$lg['time'].' microseconds'." \t".$lg['query'].'</pre>';
-			}          
-			$debug_info .= "<pre>Loaded view: \t\t".$path.'</pre>';	
-			$debug_info .= "<pre>Loaded controller: \t".$this->app->router->file.'</pre>';            
+			}  
+			$debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Action</th><th>File</th></tr></thead>';        
+			$debug_info .= "<tr><td>Loaded view:</td><td>".$path.'</td></tr>';	
+			$debug_info .= "<tr><td>Loaded controller:</td><td>".$this->app->router->file.'</td></tr>';            
+			$debug_info .= '</table>';        
 			$debug_info .= '</code>';
 		}
 		return $debug_info;
@@ -62,6 +64,7 @@ class Load {
 			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 			$_BASEHREF = $protocol.$this->app->url.'/';
 		}
+		$_DEBUG = '';
 		if (!empty($this->app->debug_mode)) {
 			$_DEBUG = $this->debug($path);
 		}

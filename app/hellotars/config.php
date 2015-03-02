@@ -20,7 +20,7 @@ $config[] = array(
 	'table_prefix'=>''
 	),
 'smart_tags'=> true,
-'debug_mode'=> 1
+'debug_mode'=> 0
 );
 
 

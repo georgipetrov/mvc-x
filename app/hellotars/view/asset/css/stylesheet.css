@@ -5,28 +5,34 @@ html {
   min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+
 }
 .footer {
-  position: absolute;
-  bottom: 0;
+  margin-top:170px;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #f5f5f5;
 }
 
 
 /* Custom page CSS
 -------------------------------------------------- */
-/* Not required for template or sticky footer method. */
+
+body .page-header > h1 {
+	margin-top:120px;
+}
+
+body .navbar-default {
+	border-bottom:none;
+}
 
 body > .container {
   padding: 60px 15px 0;
 }
 .container .text-muted {
   margin: 20px 0;
+  text-align:center;
+  font-size:12px;
 }
 
 .footer > .container {
