@@ -14,6 +14,8 @@ include '.mvcx/boot.php';
 /*** APP LOADS ***/
 $app->lib = new lib;
 $app->initialize($app->config);
-$app->load = new Load($app);
-$app->router = new router($app, $app->load,new Request, new Session);
+$request = new Request;
+$session = new Session;
+$app->load = new Load($app,$session,$request);
+$app->router = new router($app, $app->load,$request, $session);
 $app->router->loader();

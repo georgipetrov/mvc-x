@@ -1,6 +1,5 @@
 [block:header]
 [block:nav]
-
 <!-- Begin page content -->
 <div class="container">
   <div class="page-header">

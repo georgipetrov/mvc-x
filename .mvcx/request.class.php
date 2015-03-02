@@ -9,6 +9,18 @@ class Request {
 		$data = $_REQUEST;
 		$this->data = $data;
 	}
+	
+	public function isPost() {
+		return (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST');	
+	}
+
+	public function isPut() {
+		return (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'PUT');	
+	}
+
+	public function isGet() {
+		return (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET');	
+	}
 
 	public function data($param='') {
 		if (!empty($param)) {

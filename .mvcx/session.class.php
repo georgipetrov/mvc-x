@@ -3,13 +3,12 @@
 class Session {
 
 	public $data;
-
+	
 	function __construct() {
 		if (!isset($_SESSION)) {
 			session_start();	
 		}
-		$data = $_SESSION;
-		$this->data = $data;
+		$this->data = $_SESSION;
 	}
 
 	public function data($param='') {
@@ -25,7 +24,8 @@ class Session {
 	}
 	
 	public function set($key, $value) {
-		$_SESSION[$key] = $value;	
+		$_SESSION[$key] = $value;
+		$this->data = $_SESSION;
 	}
 
 	public function get($key) {
@@ -33,5 +33,18 @@ class Session {
 			return $_SESSION[$key];	
 		else 
 			return '';
+	}
+	
+	public function remove($key) {
+		unset($_SESSION[$key]);
+		$this->data = $_SESSION;
+	}
+	
+	public function flashNotification($msg,$status='success',$redirect='') {
+		$this->set('flash',array('msg'=>$msg,'status'=>$status));
+		if (!empty($redirect)) {
+			header('Location: '.$redirect, true, 301);
+			exit;
+		}
 	}
 }

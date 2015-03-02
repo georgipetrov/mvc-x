@@ -2,9 +2,13 @@
 
 class Load {
 	private $app;
+	public $session;
+	public $request;
 	private $vars = array();
-	function __construct($app) {
+	function __construct($app,$session,$request) {
 		$this->app = $app;
+		$this->session = $session;
+		$this->request = $request;
 	}
 	public function __set($index, $value) {
 		$this->vars[$index] = $value;
@@ -42,7 +46,6 @@ class Load {
 		$this->app->router->controllerObject->$name = $themodel;
 		$this->app->router->modelObject = $themodel;
 	}
-	
 	
 	function view($name,$echo=true) {
 		$x = '';

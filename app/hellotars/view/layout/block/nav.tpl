@@ -14,7 +14,7 @@
           <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
             <li><a href="page/about">About</a></li>
-            <li><a href="page/contact">Contact</a></li>
+            <li><a href="page/notifications">Notifications</a></li>
             <!--
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tutorials <span class="caret"></span></a>
@@ -39,3 +39,4 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+[widget:flash]

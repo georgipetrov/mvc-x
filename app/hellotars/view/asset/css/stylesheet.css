@@ -5,13 +5,22 @@ html {
   min-height: 100%;
 }
 body {
-
+	margin-top:50px;
 }
 .footer {
   margin-top:170px;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
+}
+
+.flash {
+	cursor:pointer;	
+}
+
+.flash > .container h3 {
+	padding:20px 0;
+	margin:0;
 }
 
 
