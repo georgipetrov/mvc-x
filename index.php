@@ -15,5 +15,5 @@ include '.mvcx/boot.php';
 $app->lib = new lib;
 $app->initialize($app->config);
 $app->load = new Load($app);
-$app->router = new router($app, $app->load);
+$app->router = new router($app, $app->load,new Request);
 $app->router->loader();

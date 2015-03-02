@@ -3,16 +3,18 @@
 abstract class Controller {
 	protected $app;
 	protected $load;
+	protected $request;
 	public $autoRender = true;
 	public $autoPersist = false;
 	public $controller;
 	public $action;
 	public $vars = array();
-	function __construct($app,$load) {
+	function __construct($app,$load,$request) {
 		$this->app = $app;
 		$this->load = $load;
 		$this->controller = $this->app->router->controller;
 		$this->action = $this->app->router->action;
+		$this->request = $this->app->router->request;
 	}
 	
 	/**
