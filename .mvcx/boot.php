@@ -6,6 +6,7 @@ include SITE_PATH . '/.mvcx/' . 'lib.class.php';
 include SITE_PATH . '/.mvcx/' . 'controller.class.php';
 include SITE_PATH . '/.mvcx/' . 'xcontroller.class.php';
 include SITE_PATH . '/.mvcx/' . 'request.class.php';
+include SITE_PATH . '/.mvcx/' . 'session.class.php';
 include SITE_PATH . '/.mvcx/' . 'model.class.php';
 include SITE_PATH . '/.mvcx/' . 'app.class.php';
 

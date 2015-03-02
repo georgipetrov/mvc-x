@@ -12,11 +12,13 @@ class router {
 	public $modelObject;
 	public $action;
 	public $request;
+	public $session;
 	
-	function __construct($app,$load,$request) {
+	function __construct($app,$load,$request,$session) {
 		$this->app = $app;
 		$this->load = $load;
 		$this->request = $request;
+		$this->session = $session;
 	}
 
 
@@ -37,7 +39,7 @@ class router {
 		$this->getController();
 		include $this->file;
 		$class = ucfirst($this->controller).'Controller';
-		$controller = new $class($this->app, $this->load,$this->request);
+		$controller = new $class($this->app, $this->load,$this->request,$this->session);
 		$this->controllerObject = $controller;
 
 		if (is_callable(array($controller, $this->action)) == false) {
