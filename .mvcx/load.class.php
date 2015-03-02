@@ -47,7 +47,7 @@ class Load {
 		$this->app->router->modelObject = $themodel;
 	}
 	
-	function view($name,$echo=true) {
+	function view($name,$echo=true,$smart_tags=true) {
 		$x = '';
 		$path = $this->app->router->path.'/view' . '/' . $name . '.tpl';
 		
@@ -72,17 +72,34 @@ class Load {
 			$_DEBUG = $this->debug($path);
 		}
 		extract($this->vars);
-		if ($this->app->smart_tags == true) {
+		if ($this->app->smart_tags == true && $smart_tags == true) {
 			$content = file_get_contents($path); 
+			
+			/* First level lookup for tags */
 			preg_match_all("/\[[^\]]*\]/", $content, $matches);
 			if (!empty($matches[0])) {
+
 				foreach ($matches[0] as $match) {
 					$m = explode(':',trim($match,'[]'));
 					if (count($m) < 2) continue;
-					$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false);
+					$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false,false);
 					$content = str_replace($match,$viewcontent,$content);
+					
 				}
-
+				
+				/* Second level lookup for tags */
+				preg_match_all("/\[[^\]]*\]/", $content, $matches);
+				if (!empty($matches[0])) {
+	
+					foreach ($matches[0] as $match) {
+						$m = explode(':',trim($match,'[]'));
+						if (count($m) < 2) continue;
+						$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false,false);
+						$content = str_replace($match,$viewcontent,$content);
+						
+					}
+				}
+					
 				$temp_file = tempnam(sys_get_temp_dir(), 'mvc');
 				file_put_contents($temp_file,$content);
 				include $temp_file;
@@ -95,7 +112,6 @@ class Load {
 		} else {
 			return file_get_contents($path);	
 		}
-
 
 	}
  
