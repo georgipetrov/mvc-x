@@ -15,17 +15,55 @@ if (!file_exists($asset)){
 	echo 'RESOURCE NOT FOUND';exit;
 }
 
-$contentType = 'text/plain';
-
-try {
-	$finfo = finfo_open(FILEINFO_MIME_TYPE);
-	$contentType = finfo_file($finfo, $asset);
-	finfo_close($finfo);
-} catch (Exception $e) {
+$contentType = '';
+	$ext = strtolower(pathinfo($asset, PATHINFO_EXTENSION));
 	
+	switch ($ext) {
+		case 'css':
+			$contentType = 'text/css';
+		break;
+		case 'map':
+		case 'js':
+			$contentType = 'text/javascript';
+		break;
+		case 'png':
+			$contentType = 'image/png';
+		break;
+		case 'jpp':
+		case 'jpeg':
+			$contentType = 'image/jpeg';
+		break;
+		case 'gif':
+			$contentType = 'image/gif';
+		break;
+		case 'ico':
+			$contentType = 'image/ico';
+		break;
+		case 'bmp':
+			$contentType = 'image/bmp';
+		break;
+		case 'tiff':
+			$contentType = 'image/tiff';
+		break;
+		case 'svg':
+			$contentType = 'image/svg+xml';
+		break;
+	}
+
+if (empty($contentType)) {
+	try {
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$contentType = finfo_file($finfo, $asset);
+		finfo_close($finfo);
+	} catch (Exception $e) {
+		
+	}
+}
+
+if (empty($contentType)) {
+	$contentType = 'text/plain';	
 }
 
 header('content-type:'.$contentType);
 readfile($asset);
-exit;
 ?>
