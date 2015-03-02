@@ -73,6 +73,7 @@ class Load {
 		}
 		$_CONTROLLER = $this->app->router->controller;
 		$_ACTION = $this->app->router->action;
+		$_BODYCLASS = $_CONTROLLER . ' ' . $_ACTION;
 		extract($this->vars);
 		if ($this->app->smart_tags == true && $smart_tags == true) {
 			$content = file_get_contents($path); 
