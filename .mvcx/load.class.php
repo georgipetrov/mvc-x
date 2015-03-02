@@ -59,8 +59,10 @@ class Load {
 			return false;
 		}
 		
-		if (!defined('BASE_HREF')) define('BASE_HREF',$this->app->url.'/');
-		
+		if (!defined('BASE_HREF')) { 
+			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+			define('BASE_HREF',$protocol.$this->app->url.'/');
+		}
 		extract($this->vars);
 		
 		include ($path); 
