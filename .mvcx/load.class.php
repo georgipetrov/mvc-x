@@ -41,7 +41,6 @@ class Load {
 	
 	
 	function view($name) {
-		
 		$x = '';
 		$path = $this->app->router->path.'/view' . '/' . $name . '.tpl';
 		
@@ -51,8 +50,6 @@ class Load {
 				$path = SITE_PATH . DS .'.mvcx'. DS .'mvc'. DS .'view' . DS . $name . '.tpl';
 			}
 		}	
-		
-		
 		
 		if (file_exists($path) == false) {
 			throw new Exception('Template not found in '. $path);
