@@ -71,6 +71,8 @@ class Load {
 		if (!empty($this->app->debug_mode)) {
 			$_DEBUG = $this->debug($path);
 		}
+		$_CONTROLLER = $this->app->router->controller;
+		$_ACTION = $this->app->router->action;
 		extract($this->vars);
 		if ($this->app->smart_tags == true && $smart_tags == true) {
 			$content = file_get_contents($path); 
