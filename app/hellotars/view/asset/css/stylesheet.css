@@ -28,11 +28,19 @@ body {
 -------------------------------------------------- */
 
 body .page-header > h1 {
-	margin-top:120px;
+	margin-top:90px;
 }
 
 body .navbar-default {
 	border-bottom:none;
+}
+
+.breadcrumb-holder {
+	padding-top:10px;	
+}
+
+.breadcrumb-holder .breadcrumb {
+	background:none;
 }
 
 body > .container {
