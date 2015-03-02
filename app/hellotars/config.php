@@ -19,6 +19,7 @@ $config[] = array(
 	'password'=>'',
 	'table_prefix'=>''
 	),
+'smart_tags'=> true,
 'debug_mode'=> 1
 );
 

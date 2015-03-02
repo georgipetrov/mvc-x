@@ -13,18 +13,20 @@ class Load {
 		$this->vars = $vars;
 	}
 	private function debug($path) {
+		$debug_info = '';
 		if ($this->app->debug_mode  == 1) {
-			echo('<code style="padding:5px 20px; margin:30px 0 0 0;background: #eee;display:block;">');
-			echo('<pre>DEBUG MODE</pre>');
+			$debug_info .= '<code style="padding:5px 20px; margin:30px 0 0 0;background: #eee;display:block;">';
+			$debug_info .= '<pre>DEBUG MODE</pre>';
 
 		
 			foreach (db::$log as $k=> $lg) {
-				echo('<pre>'.($k+1)."\t".$lg['time'].' microseconds'." \t".$lg['query'].'</pre>');
+				$debug_info .= '<pre>'.($k+1)."\t".$lg['time'].' microseconds'." \t".$lg['query'].'</pre>';
 			}          
-			echo("<pre>Loaded view: \t\t".$path.'</pre>');	
-			echo("<pre>Loaded controller: \t".$this->app->router->file.'</pre>');            
-			echo('</code>');
+			$debug_info .= "<pre>Loaded view: \t\t".$path.'</pre>';	
+			$debug_info .= "<pre>Loaded controller: \t".$this->app->router->file.'</pre>';            
+			$debug_info .= '</code>';
 		}
+		return $debug_info;
 	}
 	
 	function model($name) {
@@ -40,7 +42,7 @@ class Load {
 	}
 	
 	
-	function view($name) {
+	function view($name,$echo=true) {
 		$x = '';
 		$path = $this->app->router->path.'/view' . '/' . $name . '.tpl';
 		
@@ -56,15 +58,37 @@ class Load {
 			return false;
 		}
 		
-		if (!defined('BASE_HREF')) { 
+		if (!isset($_BASEHREF)) { 
 			$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
-			define('BASE_HREF',$protocol.$this->app->url.'/');
+			$_BASEHREF = $protocol.$this->app->url.'/';
+		}
+		if (!empty($this->app->debug_mode)) {
+			$_DEBUG = $this->debug($path);
 		}
 		extract($this->vars);
-		
-		include ($path); 
-		
-		$this->debug($path);	
+		if ($this->app->smart_tags == true) {
+			$content = file_get_contents($path); 
+			preg_match_all("/\[[^\]]*\]/", $content, $matches);
+			if (!empty($matches[0])) {
+				foreach ($matches[0] as $match) {
+					$m = explode(':',trim($match,'[]'));
+					if (count($m) < 2) continue;
+					$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false);
+					$content = str_replace($match,$viewcontent,$content);
+				}
+
+				$temp_file = tempnam(sys_get_temp_dir(), 'mvc');
+				file_put_contents($temp_file,$content);
+				include $temp_file;
+				unlink($temp_file);
+				return;
+			}
+		} 
+		if ($echo == true) {
+			include ($path); 
+		} else {
+			return file_get_contents($path);	
+		}
 
 
 	}

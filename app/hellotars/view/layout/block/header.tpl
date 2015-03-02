@@ -1,0 +1,2 @@
+HEADER
+<?php echo time(); ?>
