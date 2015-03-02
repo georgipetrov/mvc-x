@@ -46,6 +46,10 @@ class App {
 	
 	function initialize($config) {
 		$app = $this->getAppByUrl($config);
+		if (empty($app)) {
+			echo '<h1>App not found for '.$_SERVER['HTTP_HOST'].'</h1><h2>Please create and configure at least one app for this site</h2>';
+			exit;
+		}
 		$this->url = $app['url'];
 		$this->dir = $app['dir'];
 		$this->smart_tags = $app['smart_tags'];
