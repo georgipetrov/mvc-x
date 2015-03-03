@@ -3,7 +3,7 @@
 class App {
 	 public $url;
 	 public $uri;
-	 public $smart_tags;
+	 public $smart_elements;
 	 public $debug_mode;
 	 public $dbinstance;
 	 public $dir;
@@ -52,7 +52,7 @@ class App {
 		}
 		$this->url = $app['url'];
 		$this->dir = $app['dir'];
-		$this->smart_tags = $app['smart_tags'];
+		$this->smart_elements = $app['smart_elements'];
 		$this->dbconfig = $app['db'];
 		$this->debug_mode = $app['debug_mode'];
 		$this->uri = $this->getAppUriByUrl($app['url']);

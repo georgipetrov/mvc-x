@@ -6,7 +6,7 @@
  *   dir - The name of the app directory on your server e.g. mysite
  *   db - The database configuration of the app
  *   template - Specifies the name of the template you want to use. The template name should be a folder in /view/. If set to false, it will not use a template.
- *   smart_tags - If true, the response will parse all smart tags. A smart tag is e.g. [widget:breadcrumb]
+ *   smart_elements - If true, the response will parse all smart elements. A smart element is e.g. [widget:breadcrumb]
  *   debug_mode - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
  */
 
@@ -22,7 +22,7 @@ $config[] = array(
 	'table_prefix'=>''
 	),
 'template'=> false,
-'smart_tags'=> true,
+'smart_elements'=> true,
 'debug_mode'=> 0
 );
 

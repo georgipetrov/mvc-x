@@ -47,7 +47,7 @@ class Load {
 		$this->app->router->modelObject = $themodel;
 	}
 	
-	function view($name,$echo=true,$smart_tags=true) {
+	function view($name,$echo=true,$smart_elements=true) {
 		$x = '';
 		$path = $this->app->router->path.'/view' . '/' . $name . '.tpl';
 		
@@ -75,7 +75,7 @@ class Load {
 		$_ACTION = $this->app->router->action;
 		$_BODYCLASS = $_CONTROLLER . ' ' . $_ACTION;
 		extract($this->vars);
-		if ($this->app->smart_tags == true && $smart_tags == true) {
+		if ($this->app->smart_elements == true && $smart_elements == true) {
 			$content = file_get_contents($path); 
 			
 			/* First level lookup for tags */
@@ -85,7 +85,7 @@ class Load {
 				foreach ($matches[0] as $match) {
 					$m = explode(':',trim($match,'[]'));
 					if (count($m) < 2) continue;
-					$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false,false);
+					$viewcontent = $this->view('element/'.$m[0].'/'.$m[1],false,false);
 					$content = str_replace($match,$viewcontent,$content);
 					
 				}
@@ -97,7 +97,7 @@ class Load {
 					foreach ($matches[0] as $match) {
 						$m = explode(':',trim($match,'[]'));
 						if (count($m) < 2) continue;
-						$viewcontent = $this->view('layout/'.$m[0].'/'.$m[1],false,false);
+						$viewcontent = $this->view('element/'.$m[0].'/'.$m[1],false,false);
 						$content = str_replace($match,$viewcontent,$content);
 						
 					}
