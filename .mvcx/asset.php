@@ -8,7 +8,16 @@ foreach(glob('../app/*', GLOB_ONLYDIR) as $dir) {
 include('app.class.php');
 $app = new App;
 $app_info =$app->getAppByUrl($config);
-$asset = '../app/'.$app_info['dir'].'/view/asset/'.$_GET['file'];
+$template = '';
+if ($app_info['template'] !== false && !empty($app_info['template'])) {
+	$template = '/template/'. $app_info['template'];
+}
+
+$asset = '../app/'.$app_info['dir'].'/view'.$template.'/asset/'.$_GET['file'];
+
+if (!file_exists($asset)){
+	$asset = '../app/'.$app_info['dir'].'/view/asset/'.$_GET['file'];
+}
 
 if (!file_exists($asset)){
 	header('HTTP/1.0 404 Not Found');
