@@ -21,9 +21,9 @@ $config[] = array(
 	'password'=>'',
 	'table_prefix'=>''
 	),
-'template'=> false,
+'template'=> 'default',
 'smart_elements'=> true,
-'debug_mode'=> 0
+'debug_mode'=> 1
 );
 
 

@@ -3,6 +3,7 @@
 class App {
 	 public $url;
 	 public $uri;
+	 public $template;
 	 public $smart_elements;
 	 public $debug_mode;
 	 public $dbinstance;
@@ -52,6 +53,7 @@ class App {
 		}
 		$this->url = $app['url'];
 		$this->dir = $app['dir'];
+		$this->template = $app['template'];
 		$this->smart_elements = $app['smart_elements'];
 		$this->dbconfig = $app['db'];
 		$this->debug_mode = $app['debug_mode'];

@@ -36,7 +36,7 @@ class Load {
 	}
 	
 	function model($name) {
-		$path = $this->app->router->path.'/model/'.$name.'.php';
+		$path = $this->app->router->path.DS.'model'.DS.$name.'.php';
 		if (!file_exists($path)) {
 			throw new Exception('Model not found in '. $path);
 			return false;			
@@ -49,14 +49,30 @@ class Load {
 	
 	function view($name,$echo=true,$smart_elements=true) {
 		$x = '';
-		$path = $this->app->router->path.'/view' . '/' . $name . '.tpl';
+		$template = '';
+		if ($this->app->template !== false && !empty($this->app->template)) {
+			$template = DS . 'template' . DS . $this->app->template;
+		}
+
+		$path = $this->app->router->path . DS . 'view' . $template . DS . $name . '.tpl';
 		
 		if (!file_exists($path)) {
-			$path = SITE_PATH . '/app/'.$this->app->dir.'/view' . '/' . $name . '.tpl';
+			$path = SITE_PATH . DS . 'app'. DS .$this->app->dir. DS .'view'. $template . DS . $name . '.tpl';
 			if (!file_exists($path)) {
-				$path = SITE_PATH . DS .'.mvcx'. DS .'mvc'. DS .'view' . DS . $name . '.tpl';
+				$path = SITE_PATH . DS .'.mvcx'. DS .'mvc'. DS .'view'. $template . DS . $name . '.tpl';
 			}
-		}	
+		}
+		
+		// If the view is not found in the specified template, try without template
+		if (!file_exists($path) && !empty($template)) {
+			$path = $this->app->router->path . DS . 'view' . DS . $name . '.tpl';
+			if (!file_exists($path)) {
+				$path = SITE_PATH . DS . 'app'. DS .$this->app->dir. DS .'view' . DS . $name . '.tpl';
+				if (!file_exists($path)) {
+					$path = SITE_PATH . DS .'.mvcx'. DS .'mvc'. DS .'view'. DS . $name . '.tpl';
+				}
+			}
+		}
 		
 		if (file_exists($path) == false) {
 			throw new Exception('Template not found in '. $path);
@@ -85,7 +101,7 @@ class Load {
 				foreach ($matches[0] as $match) {
 					$m = explode(':',trim($match,'[]'));
 					if (count($m) < 2) continue;
-					$viewcontent = $this->view('element/'.$m[0].'/'.$m[1],false,false);
+					$viewcontent = $this->view('element'.DS.$m[0].DS.$m[1],false,false);
 					$content = str_replace($match,$viewcontent,$content);
 					
 				}
@@ -97,7 +113,7 @@ class Load {
 					foreach ($matches[0] as $match) {
 						$m = explode(':',trim($match,'[]'));
 						if (count($m) < 2) continue;
-						$viewcontent = $this->view('element/'.$m[0].'/'.$m[1],false,false);
+						$viewcontent = $this->view('element'.DS.$m[0].DS.$m[1],false,false);
 						$content = str_replace($match,$viewcontent,$content);
 						
 					}
