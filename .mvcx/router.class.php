@@ -13,6 +13,7 @@ class router {
 	public $action;
 	public $request;
 	public $session;
+	public $extensions;
 	
 	function __construct($app,$load,$request,$session) {
 		$this->app = $app;
@@ -173,7 +174,8 @@ class router {
 		);
 
 		$tryorder['extensions'] = $this->getExtensions($tryorder['extensions']);
-		
+		$this->extensions = $tryorder['extensions'];
+
 		$filepath = '';
 		foreach ($tryorder as $try) {
 			if (is_array($try)) {
