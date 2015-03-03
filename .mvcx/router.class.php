@@ -70,16 +70,16 @@ class router {
 		if ($controller->autoPersist == true) {
 			if ($this->action == 'index') {
 				$data = $this->modelObject->getAll();
-				$this->controllerObject->set('data',$data);
+				$this->controllerObject->set('persistence',$data);
 			}
 			if (!empty($this->args[0]) && $this->action == 'view') {
 				$data = $this->modelObject->getAllById($this->args[0]);
-				$this->controllerObject->set($data);
+				$this->controllerObject->set('persistence',$data);
 			}
 			if (!empty($this->args[0]) && $this->action == 'edit') {
 				$this->controllerObject->parentEdit($this->args[0]);
 				$data = $this->modelObject->getAllById($this->args[0]);
-				$this->controllerObject->set($data);
+				$this->controllerObject->set('persistence',$data);
 			}
 			if ($this->action == 'add') {
 				$this->controllerObject->parentAdd();
@@ -92,7 +92,7 @@ class router {
 						}
 				}
 				$data = $cols;
-				$this->controllerObject->set($data);
+				$this->controllerObject->set('persistence',$data);
 			}
 		}
 
