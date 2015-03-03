@@ -91,6 +91,7 @@ class Load {
 		$_ACTION = $this->app->router->action;
 		$_APPPATH = $this->app->router->path;
 		$_BODYCLASS = $_CONTROLLER . ' ' . $_ACTION;
+		$_TEMPLATE = $this->app->template;
 		extract($this->vars);
 		if ($this->app->smart_elements == true && $smart_elements == true) {
 			$content = file_get_contents($path); 
