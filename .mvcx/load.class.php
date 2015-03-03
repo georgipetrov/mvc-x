@@ -89,6 +89,7 @@ class Load {
 		}
 		$_CONTROLLER = $this->app->router->controller;
 		$_ACTION = $this->app->router->action;
+		$_APPPATH = $this->app->router->path;
 		$_BODYCLASS = $_CONTROLLER . ' ' . $_ACTION;
 		extract($this->vars);
 		if ($this->app->smart_elements == true && $smart_elements == true) {
