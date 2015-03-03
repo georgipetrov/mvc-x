@@ -23,10 +23,12 @@ class Load {
 			$debug_info .= '<h3>DEBUG</h3>';
 
 		
+			$debug_info .= '<table class="table" style="color:#222"><thead><tr><th colspan="2">Database Queries</th></tr></thead>';        
 			foreach (db::$log as $k=> $lg) {
-				$debug_info .= '<pre>'.($k+1)."\t".$lg['time'].' microseconds'." \t".$lg['query'].'</pre>';
+				$debug_info .= '<tr><td>'.($k+1)."\t".$lg['time'].' microseconds'." \t".$lg['query'].'</td></tr>';
 			}  
-			$debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Action</th><th>File</th></tr></thead>';        
+			$debug_info .= '</table>';        
+			$debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Page Lifecycle</th></tr></thead>';        
 			$debug_info .= "<tr><td>Loaded view:</td><td>".$path.'</td></tr>';	
 			$debug_info .= "<tr><td>Loaded controller:</td><td>".$this->app->router->file.'</td></tr>';            
 			$debug_info .= '</table>';        
