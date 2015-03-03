@@ -56,7 +56,23 @@ class Load {
 			$template = DS . 'template' . DS . $this->app->template;
 		}
 
-		$path = $this->app->router->path . DS . 'view' . $template . DS . $name . '.tpl';
+		$xconfig = array();
+		foreach ($this->app->router->extensions as $ext_dir) {
+			include $ext_dir.DS.'xconfig.php';
+			foreach ($xconfig as $xc) {
+				if (!empty($xc['override_views']) && $xc['override_views'] == true) {
+					$trytpl = $ext_dir.DS.'view' . DS . $name . '.tpl';
+					if (file_exists($trytpl)) {
+						$path = $trytpl;
+						break 2;
+					}
+				}
+			}
+		}
+		
+		if (empty($path) || !file_exists($path)) {
+			$path = $this->app->router->path . DS . 'view' . $template . DS . $name . '.tpl';
+		}
 		
 		if (!file_exists($path)) {
 			$path = SITE_PATH . DS . 'app'. DS .$this->app->dir. DS .'view'. $template . DS . $name . '.tpl';
