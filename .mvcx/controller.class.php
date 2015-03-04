@@ -83,7 +83,7 @@ abstract class Controller {
 			$tempFile = $_FILES['file']['tmp_name'];          //3     
 			$time = '';
 			if (!empty($this->request->data['useTimestamp'])) {
-				$time = $this->request->data['useTimestamp'].'.';
+				$time = time().'.';
 			}
 			$ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
 			$allowedFormats  = explode(',',strtolower($this->request->data('allowedFormats')));
@@ -101,7 +101,11 @@ abstract class Controller {
 				exit;
 			} else {
 				header('content-type:text/json');
-				$filename = 'asset'.DS.'uploads'.DS.$time.'.' . $_FILES['file']['name'];
+				if (!empty($uploadDir)) {
+					$uploadDir = $this->request->data['uploadDir'].DS;
+				}
+
+				$filename = 'asset'.DS.'uploads'.DS.$uploadDir.$time . $_FILES['file']['name'];
 				echo $filename;
 				exit;	
 			}
