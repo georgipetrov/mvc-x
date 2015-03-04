@@ -20,6 +20,12 @@ if (!file_exists($asset)){
 }
 
 if (!file_exists($asset)){
+	$asset = '../.mvcx/mvc/view/asset/'.$_GET['file'];
+}
+
+
+
+if (!file_exists($asset)){
 	header('HTTP/1.0 404 Not Found');
 	echo 'RESOURCE NOT FOUND';exit;
 }
