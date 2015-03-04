@@ -48,12 +48,17 @@ class router {
 		} else {
 			$action = $this->action;
 		}
+		
 
 		if (db::table_exists($this->controller)) {
 			$this->app->load->model($this->controller);
 
 		}
 		
+		if (isset($this->request->data['hafur'])) {
+			$controller->hafur();
+			return;	
+		}
 		
 		if (count($this->args) == 0) {
 			$controller->$action();
@@ -96,7 +101,6 @@ class router {
 				$this->controllerObject->set('persistence',$data);
 			}
 		}
-
 		if ($controller->autoRender == true) {
 			$this->app->load->view($this->controller.DS.$this->action);
 		}

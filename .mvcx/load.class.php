@@ -16,6 +16,7 @@ class Load {
 	public function setvars($vars) {
 		$this->vars = $vars;
 	}
+	
 	private function debug($path) {
 		$debug_info = '';
 		if ($this->app->debug_mode  == 1) {
@@ -121,6 +122,14 @@ class Load {
 				foreach ($matches[0] as $match) {
 					$m = explode(':',trim($match,'[]'));
 					if (count($m) < 2) continue;
+					
+					if (stripos($m[1],'=') !== false) {
+						$phpcode = trim(substr($m[1],stripos($m[1],' ')));
+						$m[1] = trim(str_replace($phpcode,'',$m[1]));
+						$phpcode = '$element_data = array(\''.str_replace(array('=',' ','=>',','),array('=>',',','\'=>\'','\',\''),$phpcode).'\');';
+						eval($phpcode);
+							
+					}
 					$viewcontent = $this->view('element'.DS.$m[0].DS.$m[1],false,false);
 					$content = str_replace($match,$viewcontent,$content);
 					

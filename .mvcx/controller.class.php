@@ -61,5 +61,50 @@ abstract class Controller {
        }
    	}
 	
-	
+	public function hafur() { // Handle AJAX File Upload Request
+		if (!$this->request->isPost()) {
+			return;
+			//$this->app->router->redirect();
+		}
+		$this->autoRender=false;
+		$storeFolder = 'uploads';   //2
+		$uploadDir = '';
+		if (!empty($this->request->data['uploadDir'])) {
+			$uploadDir = DS.$this->request->data['uploadDir'];	
+		}
+		$path = $this->app->router->path.DS.'view'.DS.'asset'.DS.'uploads'.$uploadDir;
+		if (!file_exists($path)) {
+			mkdir($path,0755,true);
+		}
+		
+		
+		
+		if (!empty($_FILES)) {
+			$tempFile = $_FILES['file']['tmp_name'];          //3     
+			$time = '';
+			if (!empty($this->request->data['useTimestamp'])) {
+				$time = $this->request->data['useTimestamp'].'.';
+			}
+			$ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+			$allowedFormats  = explode(',',strtolower($this->request->data('allowedFormats')));
+			
+			if(!in_array($ext,$allowedFormats)) {
+				header('HTTP/1.0 404 Not Found');
+				echo 'File not uploaded. '.strtoupper($ext)." format is not allowed.";
+				exit;
+			}
+			
+			$targetFile =  $path . DS . $time . $_FILES['file']['name'];  //5
+			if (!move_uploaded_file($tempFile,$targetFile)) {
+				header('HTTP/1.0 404 Not Found');
+				echo 'File not uploaded.';
+				exit;
+			} else {
+				header('content-type:text/json');
+				$filename = 'asset'.DS.'uploads'.DS.$time.'.' . $_FILES['file']['name'];
+				echo $filename;
+				exit;	
+			}
+		}
+	}
 }
