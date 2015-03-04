@@ -113,7 +113,14 @@ class Load {
 		$_TEMPLATE = $this->app->template;
 		extract($this->vars);
 		if ($this->app->smart_elements == true && $smart_elements == true) {
-			$content = file_get_contents($path); 
+			
+			ob_start();
+			include $path;
+			$contents = ob_get_contents();
+			ob_end_clean();
+			
+			$content = $contents;
+			//$content = file_get_contents($path); 
 			
 			/* First level lookup for tags */
 			preg_match_all("/\[[^\]]*\]/", $content, $matches);

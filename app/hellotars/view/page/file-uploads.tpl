@@ -10,7 +10,8 @@
   <code>&#91;widget:dropzone&#93;</code> anywhere in the template files and you will get a beautiful, fully functional, file upload.</p>
 
   <div style="width:340px;margin:20px 0;">
-  	[widget:dropzone uploadDir=somedir useTimestamp=true]
+  
+  	[widget:dropzone]
   </div>
 
   <p>If you like to style it, you can just override its classes with CSS, or create your own widget/dropzone.tpl and edit its HTML.</p>
