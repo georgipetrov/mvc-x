@@ -15,7 +15,8 @@
             <li><a href="page/about">About</a></li>
             <li><a href="page/notifications">Notifications</a></li>
             <li><a href="page/breadcrumbs">Breadcrumbs</a></li>
-            <!--
+            <li><a href="page/file-uploads">File Uploads</a></li>
+          <!--
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tutorials <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
