@@ -1,23 +1,29 @@
 /* General Styles
 -------------------------------------------------- */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext);
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-	margin-top:50px;
-}
 
 html, body, h1, h2, h3, h4, h5, h6, p, span, input, button {
 	font-family:'Open Sans','sans-serif';	
 }
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+code {
+  font-size: 80%;
+}
+
 .footer {
   margin-top:170px;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
 }
+
+/* [widget:flash]
+-------------------------------------------------- */
 
 .flash {
 	cursor:pointer;	
@@ -28,17 +34,8 @@ html, body, h1, h2, h3, h4, h5, h6, p, span, input, button {
 	margin:0;
 }
 
-
-/* Custom page CSS
+/* [widget:breadcrumb]
 -------------------------------------------------- */
-
-body .page-header > h1 {
-	margin-top:90px;
-}
-
-body .navbar-default {
-	border-bottom:none;
-}
 
 .breadcrumb-holder {
 	padding-top:10px;	
@@ -48,20 +45,23 @@ body .navbar-default {
 	background:none;
 }
 
-body > .container {
-  padding: 60px 15px 0;
-}
-.container .text-muted {
-  margin: 20px 0;
-  text-align:center;
-  font-size:12px;
+/* [block:nav]
+-------------------------------------------------- */
+
+
+body {
+	margin-top:50px;
 }
 
-.footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+body .navbar-default {
+	border-bottom:none;
 }
 
-code {
-  font-size: 80%;
+
+/* Custom page CSS
+-------------------------------------------------- */
+
+body .page-header > h1 {
+	margin-top:90px;
 }
+

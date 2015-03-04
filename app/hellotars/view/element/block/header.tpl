@@ -16,7 +16,7 @@
 
     <!-- Custom styles for this template -->
     <link href="asset/css/stylesheet.css" rel="stylesheet">
-
+	[widget:autopagecss]
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
