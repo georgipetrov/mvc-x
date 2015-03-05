@@ -1,6 +1,6 @@
 <?php
 
-class router {
+class Router {
 	private $app;
 	private $load;
 	public $path;
@@ -37,7 +37,13 @@ class router {
 	}
 
 	public function loader() {
-		$this->getController();
+        try {
+            $this->getController();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
+
 		include $this->file;
 		$class = ucfirst($this->controller).'Controller';
 		$controller = new $class($this->app, $this->load,$this->request,$this->session);
@@ -51,8 +57,11 @@ class router {
 		
 
 		if (db::table_exists($this->controller)) {
-			$this->app->load->model($this->controller);
-
+            try {
+                $this->app->load->model($this->controller);
+            } catch (ModelNotFoundException $e) {
+                //TODO: Do something meaningfull. Add debug/log entry maybe?
+            }
 		}
 		
 		if (isset($this->request->data['hafur'])) {
@@ -127,7 +136,7 @@ class router {
 	}
 
 	private function getController() {
-		$route = (empty($_GET['rt'])) ? '' : $_GET['rt'];
+		$route = empty($_GET['rt']) ? '' : $_GET['rt'];
 		$route = trim(str_replace($this->app->uri,'',$route),'/');
 		if (empty($route)) {
 			$route = 'page/index';
@@ -145,26 +154,23 @@ class router {
 		}
 		$this->controller = $parts[0];
 		
-		if(isset( $parts[1]))
-		{
+		if(isset($parts[1])) {
 			$this->action = $parts[1];
 		}
 		
-		if(isset( $parts[2])) {
+		if(isset($parts[2])) {
 			for ($i = 2; $i < count($parts); $i++ ) {
 				$this->args[($i-2)] = $parts[$i];	
 			}
 		}
 
 	
-		if (empty($this->controller))
-		{
+		if (empty($this->controller)) {
 			$this->controller = 'page';
 		}
 	
 
-		if (empty($this->action))
-		{
+		if (empty($this->action)) {
 			$this->action = 'index';
 		}
 
@@ -186,18 +192,17 @@ class router {
 				if ($this->x !== false) {
 					$trypath = SITE_PATH.DS.'app'.DS.$this->app->dir.DS.DIRNAME_X.DS.$this->x.DS.'controller'.DS.$this->controller.'.php';
 					
-					if (is_readable($trypath) == true) {
+					if (is_file($trypath) && is_readable($trypath)) {
 						if (stripos(file_get_contents($trypath),'extends xcontroller') !== false) {
 							$filepath = $trypath;
 							$this->setPath(SITE_PATH.DS.'app'.DS.$this->app->dir.DS.DIRNAME_X.DS.$this->x);
 							break;
 						}
-
 					} 	
 				} else {
 					foreach ($try as $x) {
 						$trypath = $x . DS . 'controller'. DS . $this->controller . '.php';
-						if (is_readable($trypath) == true) {
+						if (is_file($trypath) && is_readable($trypath) == true) {
 							if (stripos(file_get_contents($trypath),'extends controller') !== false) {
 								$filepath = $trypath;
 								$this->setPath($x);
@@ -210,14 +215,13 @@ class router {
 			} else {
 				$trypath = $try . DS . 'controller'. DS . $this->controller . '.php';
 				
-				if (is_readable($trypath) == true) {
+				if (is_file($trypath) && is_readable($trypath) == true) {
 					$filepath = $trypath;
 					$this->setPath($try);
 					break;
 				} 
 			}
 		}
-		
 		
 		if (!empty($filepath)) {
 			$this->file = $filepath;
@@ -229,7 +233,7 @@ class router {
 				}
 				$trypath = $try . DS . 'controller'. DS . 'error.php';
 				
-				if (is_readable($trypath) == true) {
+				if (is_file($trypath) && is_readable($trypath) == true) {
 					$filepath = $trypath;
 					break;
 				} 
@@ -240,9 +244,11 @@ class router {
 				$this->controller = 'error';
 				$this->action = 'notfound';
 			} else {
-				throw new Exception ('Error with unspecified page.');
+				throw new ControllerNotFoundException ('Error with unspecified page.');
 			}
 		}
 	}
 
 }
+
+class ControllerNotFoundException extends Exception {}

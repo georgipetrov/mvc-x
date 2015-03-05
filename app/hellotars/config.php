@@ -11,19 +11,19 @@
  */
 
 $config[] = array(
-'url'=>array('joro.isenselabs.com/mvc-x'),
-'dir'=>'hellotars',
-'db' => array(
-	'type'=>'mysql',
-	'host'=>'localhost',
-	'name'=>'',
-	'username'=>'',
-	'password'=>'',
-	'table_prefix'=>''
-	),
-'template'=> false,
-'smart_elements'=> true,
-'debug_mode'=> 1
+    'url'=>array('localhost/mvc-x'),
+    'dir'=>'hellotars',
+    'db' => array(
+        'type'=>'mysql',
+        'host'=>'localhost',
+        'name'=>'',
+        'username'=>'',
+        'password'=>'',
+        'table_prefix'=>''
+    ),
+    'template'=> false,
+    'smart_elements'=> true,
+    'debug_mode'=> 1
 );
 
 

@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ALL);
 
 /*** CONSTANTS ***/
@@ -13,9 +12,9 @@ include '.mvcx/boot.php';
 
 /*** APP LOADS ***/
 $app->lib = new lib;
-$app->initialize($app->config);
+$app->initialize();
 $request = new Request;
 $session = new Session;
 $app->load = new Load($app,$session,$request);
-$app->router = new router($app, $app->load,$request, $session);
+$app->router = new Router($app, $app->load,$request, $session);
 $app->router->loader();

@@ -9,6 +9,7 @@ class App {
 	 public $dbinstance;
 	 public $dir;
 	 public $dbconfig;
+     public $config = array();
 	 
 	/*
 	* @the vars array
@@ -45,10 +46,11 @@ class App {
 		return $this->vars[$index];
 	}
 	
-	function initialize($config) {
-		$app = $this->getAppByUrl($config);
-		if (empty($app)) {
-			echo '<h1>App not found for '.$_SERVER['HTTP_HOST'].'</h1><h2>Please create and configure at least one app for this site</h2>';
+	function initialize() {
+        try {
+            $app = $this->getAppByUrl();
+        } catch (Exception $e) {
+            echo $e->getMessage();
 			exit;
 		}
 		$this->url = $app['url'];
@@ -71,18 +73,16 @@ class App {
 		return (!empty($parts[1])) ? $parts[1] : '';
 	}
 	
-	function getAppByUrl($config) {
+	function getAppByUrl() {
 		$u = rtrim($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '/');
 		if (empty($u)) {
 			throw new Exception('Invalid URL');
-			return false;
 		} 
 		
 		$matches = array();
-		foreach ($config as $appkey => $app) {
+		foreach ($this->config as $appkey => $app) {
 			if (empty($app['url'])) {
-				throw new Exception('Configuration error: URL for this app is missing in config.php');
-				return false;
+				throw new ConfigErrorException('Configuration error: URL for this app is missing in config.php');
 			}
 			
 			if (is_array($app['url'])) {
@@ -98,20 +98,23 @@ class App {
 			}
 		}
 
-		function sortByLength($a,$b){
-			return strlen($a)-strlen($b);
-		}
-
-		uksort($matches,'sortByLength');
+		uksort($matches, function ($a,$b) { return strlen($a) - strlen($b); });
 
 		$appmatch = array_slice($matches,-1,1);
 		$app = array();
 		foreach ($appmatch as $url=>$id) {
-			$app = $config[$id];
+			$app = $this->config[$id];
 			$app['url'] = $url;
 		}
+
+        if (empty($app)) {
+            throw new AppNotFoundException('<h1>App not found for '.$_SERVER['HTTP_HOST'].'</h1><h2>Please create and configure at least one app for this site</h2>');
+        }
 		
 		return $app;
 	}
  
 }
+
+class AppNotFoundException extends Exception {}
+class ConfigErrorException extends Exception {}
