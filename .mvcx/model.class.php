@@ -1,18 +1,17 @@
 <?php
 
-abstract class Model {
+abstract class Model extends Base {
 	
 	/*
 	 * @registry object
 	 */
-	protected $app;
 	protected $dbname;
 	protected $table;
 	protected $tableprefix;
 	protected $tablecolumns = array();
 	
-	function __construct($app) {
-		$this->app = $app;
+	function __construct($registry) {
+        parent::__construct($registry);
 		$this->tableprefix = $this->app->dbconfig['table_prefix'];
 		$this->dbname = $this->app->dbconfig['name'];
 		$this->table = $this->app->router->controller;

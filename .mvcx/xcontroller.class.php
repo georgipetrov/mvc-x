@@ -1,16 +1,13 @@
 <?php
 
-abstract class XController {
-	protected $app;
-	protected $load;
+abstract class XController extends Base {
 	public $autoRender = true;
 	public $autoPersist = false;
 	public $controller;
 	public $action;
 	public $vars = array();
-	function __construct($app,$load) {
-		$this->app = $app;
-		$this->load = $load;
+	function __construct($registry) {
+        parent::__construct($registry);
 		$this->controller = $this->app->router->controller;
 		$this->action = $this->app->router->action;
 	}

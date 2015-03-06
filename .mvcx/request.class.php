@@ -5,7 +5,6 @@ class Request {
 	public $data;
 
 	function __construct() {
-		
 		$data = $_REQUEST;
 		$this->data = $data;
 	}

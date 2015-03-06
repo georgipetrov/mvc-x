@@ -11,10 +11,16 @@ define ('DIRNAME_X', 'x');
 include '.mvcx/boot.php';
 
 /*** APP LOADS ***/
-$app->lib = new lib;
+$registry->set('lib', new lib);
 $app->initialize();
-$request = new Request;
-$session = new Session;
-$app->load = new Load($app,$session,$request);
-$app->router = new Router($app, $app->load,$request, $session);
+$request = new Request();
+$registry->set('request', $request);
+$session = new Session();
+$registry->set('session', $session);
+$load = new Load($app,$session,$request, $registry);
+$registry->set('load', $load);
+$app->load = $load;
+$router = new Router($registry);
+$registry->set('router', $registry);
+$app->router = $router;
 $app->router->loader();
