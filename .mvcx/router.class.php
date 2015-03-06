@@ -1,8 +1,6 @@
 <?php
 
-class Router {
-	private $app;
-	private $load;
+class Router extends Base {
 	public $path;
 	public $args = array();
 	public $x = false;
@@ -11,15 +9,10 @@ class Router {
 	public $controllerObject;
 	public $modelObject;
 	public $action;
-	public $request;
-	public $session;
 	public $extensions;
 	
-	function __construct($app,$load,$request,$session) {
-		$this->app = $app;
-		$this->load = $load;
-		$this->request = $request;
-		$this->session = $session;
+	function __construct($registry) {
+        parent::__construct($registry);
 	}
 
 
@@ -46,7 +39,7 @@ class Router {
 
 		include $this->file;
 		$class = ucfirst($this->controller).'Controller';
-		$controller = new $class($this->app, $this->load,$this->request,$this->session);
+		$controller = new $class($this->registry);
 		$this->controllerObject = $controller;
 
 		if (is_callable(array($controller, $this->action)) == false) {

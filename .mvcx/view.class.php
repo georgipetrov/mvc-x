@@ -1,12 +1,12 @@
 <?php
-class View {
-    private $app;
+class View extends Base {
     private $name;
     private $vars;
     private $smart_elements;
 
-    public function __construct($app, $name, $vars = array(), $smart_elements=true) {
-        $this->app = $app;
+    public function __construct($registry, $name, $vars = array(), $smart_elements=true) {
+        parent::__construct($registry);
+
         $this->name = $name;
         $this->vars = $vars;
         $this->smart_elements = $smart_elements;
@@ -132,7 +132,7 @@ class View {
                     }
                     $view_name = 'element'.DS.$m[0].DS.$m[1];
 
-                    $view = new View($this->app, $view_name, $view_vars, $this->smart_elements);
+                    $view = new View($this->registry, $view_name, $view_vars, $this->smart_elements);
                     $viewcontent = $view->render();
                     $content = str_replace($match,$viewcontent,$content);
 

@@ -1,22 +1,15 @@
 <?php
 
-abstract class Controller {
-	protected $app;
-	protected $load;
-	protected $request;
-	protected $session;
+abstract class Controller extends Base {
 	public $autoRender = true;
 	public $autoPersist = false;
 	public $controller;
 	public $action;
 	public $vars = array();
-	function __construct($app,$load,$request,$session) {
-		$this->app = $app;
-		$this->load = $load;
+	function __construct($registry) {
+        parent::__construct($registry);
 		$this->controller = $this->app->router->controller;
 		$this->action = $this->app->router->action;
-		$this->request = $this->app->router->request;
-		$this->session = $this->app->router->session;
 	}
 	
 	/**
