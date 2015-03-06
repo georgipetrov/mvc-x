@@ -106,7 +106,6 @@ class View {
         ob_end_clean();
 
         if ($this->app->smart_elements == true && $this->smart_elements == true) {
-            /* First level lookup for tags */
             preg_match_all("/\[[^\]]*\]/", $content, $matches); //TODO: Test if this works with several elements on one line. May need to make the regex non-greedy and put a capture group
             if (!empty($matches[0])) {
 
@@ -138,12 +137,6 @@ class View {
                     $content = str_replace($match,$viewcontent,$content);
 
                 }
-
-                $temp_file = tempnam(sys_get_temp_dir(), 'mvc');
-                file_put_contents($temp_file,$content);
-                include $temp_file;
-                unlink($temp_file);
-                return;
             }
         } 
 
