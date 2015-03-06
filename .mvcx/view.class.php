@@ -34,11 +34,7 @@ class View extends Base {
             $debug_info .= '</table>';        
             $debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Custom logs</th></tr></thead>';        
             foreach ($this->log->getDebugLogs() as $key=>$value) {
-                if (is_array($value) || is_object($value)) {
-                    $debug_info .= '<tr><td>' . $key . '</td><td>' . print_r($value, true) . '</td></tr>';
-                } else {
-                    $debug_info .= '<tr><td>' . $key . '</td><td>' . $value . '</td></tr>';
-                }
+                $debug_info .= '<tr><td>' . $key . '</td><td>' . print_r($value, true) . '</td></tr>';
             }
             $debug_info .= '</table>';        
             $debug_info .= '</code>';
