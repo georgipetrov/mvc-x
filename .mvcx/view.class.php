@@ -16,9 +16,9 @@ class View extends Base {
         $this->vars[$key] = $value;
     }
 
-    private function debug($path) {
+    private function getDebugInfo($path) {
         $debug_info = '';
-        if ($this->app->debug_mode  == 1) {
+        if ($this->app->debug_mode == 1) {
             $debug_info .= '<code style="padding:5px 20px; margin:0;border-top:2px dashed #c7254e; display:block;">';
             $debug_info .= '<h3>DEBUG</h3>';
 
@@ -31,6 +31,15 @@ class View extends Base {
             $debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Page Lifecycle</th></tr></thead>';        
             $debug_info .= "<tr><td>Loaded view:</td><td>".$path.'</td></tr>';	
             $debug_info .= "<tr><td>Loaded controller:</td><td>".$this->app->router->file.'</td></tr>';            
+            $debug_info .= '</table>';        
+            $debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Custom logs</th></tr></thead>';        
+            foreach ($this->log->getDebugLogs() as $key=>$value) {
+                if (is_array($value) || is_object($value)) {
+                    $debug_info .= '<tr><td>' . $key . '</td><td>' . print_r($value, true) . '</td></tr>';
+                } else {
+                    $debug_info .= '<tr><td>' . $key . '</td><td>' . $value . '</td></tr>';
+                }
+            }
             $debug_info .= '</table>';        
             $debug_info .= '</code>';
         }
@@ -89,8 +98,8 @@ class View extends Base {
             $_BASEHREF = $protocol.$this->app->url.'/';
         }
         $_DEBUG = '';
-        if (!empty($this->app->debug_mode)) {
-            $_DEBUG = $this->debug($path);
+        if ($this->app->debug_mode) {
+            $_DEBUG = $this->getDebugInfo($path);
         }
         $_CONTROLLER = $this->app->router->controller;
         $_ACTION = $this->app->router->action;
