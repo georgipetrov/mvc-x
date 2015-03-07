@@ -15,16 +15,16 @@
 <script src="asset/js/dropzone.js" type="text/javascript"></script>
 <script type="text/javascript">
 Dropzone.options.myAwesomeDropzone = {
-  dictDefaultMessage: '<?php echoine($element_data['defaultMessage'],'Click or drop here to upload files'); ?>',
-  maxFiles: <?php echoine($element_data['maxFiles'],1); ?>,
+  dictDefaultMessage: '<?php echoine($defaultMessage,'Click or drop here to upload files'); ?>',
+  maxFiles: <?php echoine($maxFiles,1); ?>,
   params: {
-	'uploadDir':'<?php echoine($element_data['uploadDir']); ?>',
-	'useTimestamp':'<?php echoine($element_data['useTimestamp']); ?>',
-	'allowedFormats':'<?php echoine($element_data['allowedFormats'],"png,jpg,jpeg,gif,zip,pdf"); ?>'  
+	'uploadDir':'<?php echoine($uploadDir); ?>',
+	'useTimestamp':'<?php echoine($useTimestamp); ?>',
+	'allowedFormats':'<?php echoine($allowedFormats,"png,jpg,jpeg,gif,zip,pdf"); ?>'  
   },
   init: function() {
     this.on("success", function(e,result) { 
-		var field = '<?php echoine($element_data['field']); ?>';
+		var field = '<?php echoine($field); ?>';
 		if (field && field != '') {
 			var val = $('input[name="'+field+'"],input[id="'+field+'"]').val();
 			if (val && val != '' && result && result != '') {
