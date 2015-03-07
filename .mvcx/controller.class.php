@@ -1,5 +1,4 @@
 <?php
-
 abstract class Controller extends Base {
 	public $autoRender = true;
 	public $autoPersist = false;
@@ -97,7 +96,6 @@ abstract class Controller extends Base {
 				if (!empty($uploadDir)) {
 					$uploadDir = $this->request->data['uploadDir'].DS;
 				}
-
 				$filename = 'asset'.DS.'uploads'.DS.$uploadDir.$time . $_FILES['file']['name'];
 				echo $filename;
 				exit;	
