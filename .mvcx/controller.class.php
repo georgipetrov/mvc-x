@@ -37,7 +37,7 @@ abstract class Controller extends Base {
 		if (!empty($_POST)) {
 			$data = $_POST;
 			$model = $this->controller;
-			$this->$model->save($data);	
+			return $this->$model->save($data);	
 		}
 	}
 	
