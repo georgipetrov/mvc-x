@@ -29,7 +29,7 @@ abstract class Controller extends Base {
 		if (!empty($_POST) && !(empty($id))) {
 			$data = array_merge(array('id'=>$id),$_POST);
 			$model = $this->controller;
-			$this->$model->save($data);	
+			return $this->$model->save($data);	
 		}
 	}
 	
