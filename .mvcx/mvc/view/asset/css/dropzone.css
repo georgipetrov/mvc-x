@@ -215,7 +215,7 @@
 }
 
 .dropzone {
-  min-height: 50px;
+  min-height: 55px;
   border: 2px dashed #ccc;
   background: white;
   padding: 15px 15px; }
@@ -234,7 +234,7 @@
       opacity: 0.5; }
   .dropzone .dz-message {
     text-align: center;
-    margin: 2em 0; }
+    margin: 0; }
   .dropzone .dz-preview {
     position: relative;
     display: inline-block;

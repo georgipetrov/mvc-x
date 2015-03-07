@@ -8,13 +8,15 @@
     defaultMessage - the upload default message
  */
 ?>
+<?php 
+	$dropzone_id = rand(100,99999);
+?>
 <link href="asset/css/dropzone.css" type="text/css" rel="stylesheet" />
-<div action="?hafur" class="dropzone" id="my-awesome-dropzone" enctype="multipart/form-data">
+<div action="?hafur" class="dropzone" id="my-awesome-dropzone-<?php echo $dropzone_id;?>" enctype="multipart/form-data">
 </div>
-
-<script src="asset/js/dropzone.js" type="text/javascript"></script>
+<script>window.Dropzone || document.write('<script src="asset/js/dropzone.js"><\/script>')</script>
 <script type="text/javascript">
-Dropzone.options.myAwesomeDropzone = {
+Dropzone.options.myAwesomeDropzone<?php echo $dropzone_id;?> = {
   dictDefaultMessage: '<?php echoine($defaultMessage,'Click or drop here to upload files'); ?>',
   maxFiles: <?php echoine($maxFiles,1); ?>,
   params: {
@@ -24,7 +26,7 @@ Dropzone.options.myAwesomeDropzone = {
   },
   init: function() {
     this.on("success", function(e,result) { 
-		var field = '<?php echoine($field); ?>';
+		var field = '<?php echoine($field); ?>'.trim();
 		if (field && field != '') {
 			var val = $('input[name="'+field+'"],input[id="'+field+'"]').val();
 			if (val && val != '' && result && result != '') {
