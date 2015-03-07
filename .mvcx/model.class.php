@@ -149,6 +149,12 @@ abstract class Model extends Base {
 			$entry['ip'] = $this->app->lib->getIp();
 		}
 		
+		foreach($entry as $k=> $e) {
+			if(!array_key_exists($k,$columns)) {
+				unset($entry[$k]);
+			}
+		}
+		
 		$doinsert = true;
 		if (isset($entry['id'])) {
 			$existing = $this->query("SELECT * FROM `$db`.`$table` WHERE `id` = $entry[id] LIMIT 1");
