@@ -138,6 +138,7 @@ abstract class Controller extends Base {
 			}
 			
 			$targetFile =  $path . DS . $time . $_FILES['file']['name'];  //5
+			$targetFile = str_replace(array(' ','.JPG','.PNG','.GIF'),array('-','.jpg','.png','.gif'),$targetFile);
 			if (!move_uploaded_file($tempFile,$targetFile)) {
 				header('HTTP/1.0 404 Not Found');
 				echo 'File not uploaded.';
