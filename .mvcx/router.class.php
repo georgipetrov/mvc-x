@@ -28,6 +28,47 @@ class Router extends Base {
 	public function redirect($url) {
 		header('Location: '.$url);
 	}
+	
+	public function setAutoPersist($controller) {
+
+		$persistAction = returnine($controller->autoPersist['action'], $this->action);
+		
+		if ($persistAction == 'index') {
+			$data = $this->modelObject->getAll();
+			$this->controllerObject->set('persistence',$data);
+		}
+		if (!empty($this->args[0]) && $persistAction == 'view') {
+			$data = $this->modelObject->getAllById($this->args[0]);
+			$this->controllerObject->set($data);
+			$this->controllerObject->set('persistence',$data);
+		}
+		if (!empty($this->args[0]) && $persistAction == 'edit') {
+			$this->controllerObject->parentEdit($this->args[0]);
+			$data = $this->modelObject->getAllById($this->args[0]);
+			$this->controllerObject->set($data);
+			$this->controllerObject->set('persistence',$data);
+		}
+		if ($persistAction == 'add') {
+			$validate = $this->controllerObject->validate();
+			
+			if ($validate !== true) {
+				if(!empty($validate['ifempty'])) {
+					$msg = $controller->autoPersist['flash']['ifempty'];
+				}
+				$persistVars = returnine($_POST,false);
+				$this->session->flashNotification($msg,'danger','',$persistVars);
+				return;
+			}
+			if ($this->controllerObject->parentAdd()) {
+				$persistVars = returnine($_POST,false);
+				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success','',$persistVars);
+				return;
+			}
+			$this->controllerObject->set($data);
+			$this->controllerObject->set('persistence',$data);
+		}
+
+	}
 
 	public function loader() {
         try {
@@ -53,7 +94,7 @@ class Router extends Base {
             try {
                 $this->app->load->model($this->controller);
             } catch (ModelNotFoundException $e) {
-                //TODO: Do something meaningfull. Add debug/log entry maybe?
+                //TODO: Do something meaningful. Add debug/log entry maybe?
             }
 		}
 		
@@ -75,33 +116,8 @@ class Router extends Base {
 			call_user_func_array(array($controller,$action),$this->args);
 		}
 		
-		if ($controller->autoPersist == true) {
-			if ($this->action == 'index') {
-				$data = $this->modelObject->getAll();
-				$this->controllerObject->set('persistence',$data);
-			}
-			if (!empty($this->args[0]) && $this->action == 'view') {
-				$data = $this->modelObject->getAllById($this->args[0]);
-				$this->controllerObject->set('persistence',$data);
-			}
-			if (!empty($this->args[0]) && $this->action == 'edit') {
-				$this->controllerObject->parentEdit($this->args[0]);
-				$data = $this->modelObject->getAllById($this->args[0]);
-				$this->controllerObject->set('persistence',$data);
-			}
-			if ($this->action == 'add') {
-				$this->controllerObject->parentAdd();
-				$cols = $this->modelObject->getColumns();
-				foreach($cols as &$c) $c = '';
-				if(!empty($_POST)) {
-					foreach ($cols as $k=>$v)
-						if (!empty($_POST[$k])) {
-							$cols[$k] = $_POST[$k];
-						}
-				}
-				$data = $cols;
-				$this->controllerObject->set('persistence',$data);
-			}
+		if ($controller->autoPersist !== false) {
+			$this->setAutoPersist($controller);
 		}
 		if ($controller->autoRender == true) {
 			$this->app->load->view($this->controller.DS.$this->action);

@@ -108,7 +108,11 @@ class View extends Base {
         $_TEMPLATE = $this->app->template;
 
         extract($this->vars);
-
+		
+		if (!empty($this->session->data['flash-vars'])) {
+			extract($this->session->data['flash-vars']);
+			unset($_SESSION['flash-vars']);
+		}
         ob_start();
         include $path;
         $content = ob_get_contents();

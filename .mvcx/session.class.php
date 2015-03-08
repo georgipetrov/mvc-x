@@ -40,8 +40,11 @@ class Session {
 		$this->data = $_SESSION;
 	}
 	
-	public function flashNotification($msg,$status='success',$redirect='') {
+	public function flashNotification($msg,$status='success',$redirect='',$persistVars=false) {
 		$this->set('flash',array('msg'=>$msg,'status'=>$status));
+		if ($persistVars!=false) {
+			$this->set('flash-vars',$persistVars);
+		}
 		if (!empty($redirect)) {
 			header('Location: '.$redirect, true, 301);
 			exit;

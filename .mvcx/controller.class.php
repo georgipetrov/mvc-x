@@ -30,6 +30,8 @@ abstract class Controller extends Base {
 			$data = array_merge(array('id'=>$id),$_POST);
 			$model = $this->controller;
 			return $this->$model->save($data);	
+		} else {
+			return false;	
 		}
 	}
 	
@@ -38,7 +40,55 @@ abstract class Controller extends Base {
 			$data = $_POST;
 			$model = $this->controller;
 			return $this->$model->save($data);	
+		} else {
+			return false;	
 		}
+	}
+	
+	public function validate($data=array(),$criteria=array()) {
+		if (empty($data) && ($this->request->isPost() || $this->request->isPut())) {
+			$data = $this->request->data;	
+		}
+		if (empty($data)) {
+			return true;	
+		}
+		$notvalidated = array();
+		// If there is only data and no criteria, it validate all fields if not empty
+		if (empty($criteria)) {
+			foreach ($data as $kfield => $vfield) {
+				if (empty($vfield)) {
+					if (!isset($notvalidated['ifempty'])) $notvalidated['ifempty'] = array();
+					$notvalidated['ifempty'][] = $kfield;
+				}
+			}
+		} else {
+			foreach ($criteria as $k=>$c) {
+				if (in_array($c,$data)) {
+					if (empty($data[$c])) {
+						if (!isset($notvalidated['ifempty'])) $notvalidated['ifempty'] = array();
+						$notvalidated['ifempty'][] = $c;	
+					}
+				} else {
+					if (!isset($notvalidated['ifempty'])) $notvalidated['ifempty'] = array();
+					$notvalidated['ifempty'][] = $c;	
+				}
+			}
+		}
+		if (!empty($notvalidated)) {
+			return $notvalidated;	
+		} else {
+			return true;
+		}
+	}
+	
+	public function autoPersist($flash='',$validate='',$action='') {
+		if (empty($flash)) {
+			$flash = array(
+				'ifempty' => 'Please fill in all required fields',
+				'success' => 'Sucessfully saved!'
+			);
+		}
+		$this->autoPersist = array('flash'=>$flash,'validate'=>$validate,'action'=>$action);
 	}
 	
 	public function redirect($url) {
