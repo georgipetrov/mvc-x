@@ -19,7 +19,7 @@ $request = new Request();
 $registry->set('request', $request);
 $session = new Session();
 $registry->set('session', $session);
-$load = new Load($app,$session,$request, $registry);
+$load = new Load($registry);
 $registry->set('load', $load);
 $app->load = $load;
 $router = new Router($registry);

@@ -14,7 +14,7 @@ abstract class Model extends Base {
         parent::__construct($registry);
 		$this->tableprefix = $this->app->dbconfig['table_prefix'];
 		$this->dbname = $this->app->dbconfig['name'];
-		$this->table = $this->app->router->controller;
+		$this->table = $this->router->controller;
 	}
 	
 	function query($query) {

@@ -94,6 +94,14 @@ class Router extends Base {
             exit;
         }
 
+		if (db::table_exists($this->controller)) {
+            try {
+                $this->load->model($this->controller);
+            } catch (ModelNotFoundException $e) {
+                //TODO: Do something meaningful. Add debug/log entry maybe?
+            }
+		}
+		
 		include $this->file;
 		$class = ucfirst($this->controller).'Controller';
 		$controller = new $class($this->registry);
@@ -103,15 +111,6 @@ class Router extends Base {
 			$action = 'index';
 		} else {
 			$action = $this->action;
-		}
-		
-
-		if (db::table_exists($this->controller)) {
-            try {
-                $this->app->load->model($this->controller);
-            } catch (ModelNotFoundException $e) {
-                //TODO: Do something meaningful. Add debug/log entry maybe?
-            }
 		}
 		
 		if (isset($this->request->data['hafur'])) {
