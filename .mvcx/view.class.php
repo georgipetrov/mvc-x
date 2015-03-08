@@ -34,7 +34,11 @@ class View extends Base {
             $debug_info .= '</table>';        
             $debug_info .= '<table class="table" style="color:#222"><thead><tr><th>Custom logs</th></tr></thead>';        
             foreach ($this->log->getDebugLogs() as $key=>$value) {
-                $debug_info .= '<tr><td>' . $key . '</td><td>' . print_r($value, true) . '</td></tr>';
+                if (is_array($value) || is_object($value)) {
+                    $debug_info .= '<tr><td>' . $key . '</td><td><pre>' . print_r($value, true) . '</pre></td></tr>';
+                } else {
+                    $debug_info .= '<tr><td>' . $key . '</td><td>' . print_r($value, true) . '</td></tr>';
+                }
             }
             $debug_info .= '</table>';        
             $debug_info .= '</code>';
@@ -125,7 +129,7 @@ class View extends Base {
                         $vars = NULL;
                         preg_match_all('/(\w+?)\=/', $phpcode, $vars);
                         if ($vars) {
-                            $values = preg_split('/\w+?\=/', $phpcode);
+                            $values = preg_split('/\s?\w+?\=/', $phpcode);
                             array_shift($values); //the first element is an empty string because our string starts with a var name
 
                             foreach ($vars[1] as $key=>$val) {
