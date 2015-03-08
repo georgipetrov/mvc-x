@@ -85,7 +85,8 @@ abstract class Controller extends Base {
 		if (empty($flash)) {
 			$flash = array(
 				'ifempty' => 'Please fill in all required fields',
-				'success' => 'Sucessfully saved!'
+				'success' => 'Sucessfully saved!',
+				'redirect' => ''
 			);
 		}
 		$this->autoPersist = array('flash'=>$flash,'validate'=>$validate,'action'=>$action);
