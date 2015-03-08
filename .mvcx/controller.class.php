@@ -47,7 +47,7 @@ abstract class Controller extends Base {
 	
 	public function validate($data=array(),$criteria=array()) {
 		if (empty($data) && ($this->request->isPost() || $this->request->isPut())) {
-			$data = $this->request->data;	
+			$data = $this->request->post + $this->request->put;
 		}
 		if (empty($data)) {
 			return true;	
