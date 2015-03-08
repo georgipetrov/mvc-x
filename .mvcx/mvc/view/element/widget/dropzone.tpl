@@ -22,7 +22,8 @@ Dropzone.options.myAwesomeDropzone<?php echo $dropzone_id;?> = {
   params: {
 	'uploadDir':'<?php echoine($uploadDir); ?>',
 	'useTimestamp':'<?php echoine($useTimestamp); ?>',
-	'allowedFormats':'<?php echoine($allowedFormats,"png,jpg,jpeg,gif,zip,pdf"); ?>'  
+	'allowedFormats':'<?php echoine($allowedFormats,"png,jpg,jpeg,gif,zip,pdf"); ?>',
+	'copyToAnotherApp':'<?php echoine($copyToAnotherApp); ?>'
   },
   init: function() {
     this.on("success", function(e,result) { 
