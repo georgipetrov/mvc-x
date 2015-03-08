@@ -81,7 +81,7 @@ abstract class Controller extends Base {
 		}
 	}
 	
-	public function autoPersist($flash='',$validate='',$action='') {
+	public function autoPersist($validate=true,$flash='',$action='') {
 		if (empty($flash)) {
 			$flash = array(
 				'ifempty' => 'Please fill in all required fields',
