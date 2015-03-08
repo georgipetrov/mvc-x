@@ -73,7 +73,7 @@ class Router extends Base {
 			}
 		}
 		if ($persistAction == 'add') {			
-			$redirect = returnine($controller->autoPersist['flash']['redirect'],$redirect);
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
 			if ($controller->autoPersist['validate'] !== true) {
 				if(!empty($controller->autoPersist['validate']['ifempty'])) {
 					$msg = $controller->autoPersist['flash']['ifempty'];
