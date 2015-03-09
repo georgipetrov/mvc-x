@@ -104,7 +104,7 @@ class Router extends Base {
             try {
                 $this->load->model($this->controller);
             } catch (ModelNotFoundException $e) {
-                //TODO: Do something meaningful. Add debug/log entry maybe?
+                $this->log->debug('ModelNotFound', $e->getMessage(), NOTICE_DEBUG_GROUP);
             }
 		}
 		

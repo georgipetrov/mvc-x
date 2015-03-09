@@ -6,6 +6,7 @@ define ('DS', DIRECTORY_SEPARATOR);
 define ('SITE_PATH', realpath(dirname(__FILE__)));
 define ('SITE_HOST',$_SERVER['HTTP_HOST']);
 define ('DIRNAME_X', 'x');
+define ('NOTICE_DEBUG_GROUP', 'Notices');
 
 /*** BOOTUP ***/
 include '.mvcx/boot.php';

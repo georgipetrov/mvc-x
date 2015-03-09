@@ -43,21 +43,26 @@ class Log {
             $this->releaseFile();
         } catch (Exception $e) {
             $this->releaseFile();
-            //TODO: Display the error if error reporting is enabled
+            $this->debug('Warning', 'Could not write to log file ' . $this->file, NOTICE_DEBUG_GROUP);
         }
     }
 
-    public function debug($key, $value = '') {
+    public function debug($key, $value = '', $group = 'Custom logs') {
+        if (!isset($this->debug[$group])) $this->debug[$group] = array();
+        $logs = &$this->debug[$group];
+
         if (is_array($key)) {
             foreach ($key as $k=>$v) {
-                $this->debug[$k] = $v;
+                $logs[$k] = $v;
             }
         } else {
-            $this->debug[$key] = $value;
+            $logs[$key] = $value;
         }
     }
 
-    public function getDebugLogs() { return $this->debug; }
+    public function getDebugGroups() { return array_keys($this->debug); }
+
+    public function getDebugLogs($group) { return isset($this->debug[$group]) ? $this->debug[$group] : array(); }
 }
 
 class PermissionDeniedException extends Exception {}
