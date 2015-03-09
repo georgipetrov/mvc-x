@@ -4,7 +4,7 @@ abstract class Controller extends Base {
 	public $autoPersist = false;
 	public $controller;
 	public $action;
-	public $vars = array();
+
 	function __construct($registry) {
         parent::__construct($registry);
 		$this->controller = $this->app->router->controller;
@@ -16,12 +16,13 @@ abstract class Controller extends Base {
 	 */
 	abstract function index();
 	
-	function set($key,$value='') {
-		if ($value == '') {
-			$this->load->setvars($key);
+	function set($key, $value='') {
+        if (empty($this->view_vars)) $this->view_vars = array();
+
+		if (is_array($key)) {
+			$this->view_vars = array_merge($this->view_vars, $key);
 		} else {
-			$vars = array($key => $value);
-			$this->load->setvars($vars);	
+			$this->view_vars[$key] = $value;	
 		}
 	}
 	
@@ -63,7 +64,7 @@ abstract class Controller extends Base {
 			}
 		} else {
 			foreach ($criteria as $k=>$c) {
-				if (in_array($c,$data)) {
+				if (array_key_exists($c,$data)) {
 					if (empty($data[$c])) {
 						if (!isset($notvalidated['ifempty'])) $notvalidated['ifempty'] = array();
 						$notvalidated['ifempty'][] = $c;	
@@ -95,14 +96,6 @@ abstract class Controller extends Base {
 	public function redirect($url) {
 		$this->app->router->redirect($url);	
 	}
-	
-	public function __call($method, $args) {
-       if(property_exists($this, $method)) {
-           if(is_callable($this->$method)) {
-               return call_user_func_array($this->$method, $args);
-           }
-       }
-   	}
 	
 	public function hafur() { // Handle AJAX File Upload Request
 		if (!$this->request->isPost()) {

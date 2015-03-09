@@ -6,22 +6,26 @@ class Registry {
         $this->vars = array();
     }
 
-    public function __get($name) {
+    public function &__get($name) {
         if (isset($this->vars[$name])) {
             return $this->vars[$name];
+        } else {
+            $this->vars[$name] = NULL;
+            return $this->vars[$name];
         }
-        return NULL;
     }
 
     public function __set($name, $value) {
-        $this->registry->vars[$name] = $value;
+        $this->vars[$name] = $value;
     }
 
-    public function get($name) {
+    public function &get($name) {
         if (isset($this->vars[$name])) {
             return $this->vars[$name];
+        } else {
+            $this->vars[$name] = NULL;
+            return $this->vars[$name];
         }
-        return NULL;
     }
 
     public function set($name, $value) {

@@ -1,25 +1,8 @@
 <?php
 
-class Load {
-    private $app;
-    private $registry;
-    public $session;
-    public $request;
-    private $vars = array();
-
-    function __construct($app,$session,$request, $registry) {
-        $this->app = $app;
-        $this->session = $session;
-        $this->request = $request;
-        $this->registry = $registry;
-    }
-
-    public function __set($index, $value) {
-        $this->vars[$index] = $value;
-    }
-
-    public function setvars($vars) {
-        $this->vars = $vars;
+class Load extends Base {
+    function __construct($registry) {
+        parent::__construct($registry);
     }
 
     public function model($name) {
@@ -29,12 +12,13 @@ class Load {
         }
         include $path;
         $themodel = new $name($this->registry);
-        $this->app->router->controllerObject->$name = $themodel;
-        $this->app->router->modelObject = $themodel;
+        $this->$name = $themodel;
+        $this->router->modelObject = $themodel;
     }
 
     public function view($name, $echo = true, $smart_elements = true) {
-        $view = new View($this->registry, $name, $this->vars, $smart_elements);
+        $view_vars = $this->view_vars ? $this->view_vars : array();
+        $view = new View($this->registry, $name, $view_vars, $smart_elements);
 
         $content = $view->render();
         if ($echo == true) {
