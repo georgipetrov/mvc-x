@@ -48,7 +48,7 @@ abstract class Controller extends Base {
 	
 	public function validate($data=array(),$criteria=array()) {
 		if (empty($data) && ($this->request->isPost() || $this->request->isPut())) {
-			$data = $this->request->data;	
+			$data = $this->request->post + $this->request->put;
 		}
 		if (empty($data)) {
 			return true;	
@@ -86,7 +86,8 @@ abstract class Controller extends Base {
 		if (empty($flash)) {
 			$flash = array(
 				'ifempty' => 'Please fill in all required fields',
-				'success' => 'Sucessfully saved!'
+				'success' => 'Sucessfully saved!',
+				'redirect' => ''
 			);
 		}
 		$this->autoPersist = array('flash'=>$flash,'validate'=>$validate,'action'=>$action);
@@ -103,6 +104,7 @@ abstract class Controller extends Base {
 		}
 		$this->autoRender=false;
 		$storeFolder = 'uploads';   //2
+		$copyToAnotherApp = returnine($this->request->data['copyToAnotherApp']);
 		$uploadDir = '';
 		if (!empty($this->request->data['uploadDir'])) {
 			$uploadDir = DS.$this->request->data['uploadDir'];	
@@ -129,17 +131,34 @@ abstract class Controller extends Base {
 				exit;
 			}
 			
+			function fixQuirks($filename) {
+				return str_replace(array(' ','.JPG','.PNG','.GIF'),array('-','.jpg','.png','.gif'),$filename);
+			}
+			
 			$targetFile =  $path . DS . $time . $_FILES['file']['name'];  //5
+			$targetFile = fixQuirks($targetFile);
 			if (!move_uploaded_file($tempFile,$targetFile)) {
 				header('HTTP/1.0 404 Not Found');
 				echo 'File not uploaded.';
 				exit;
 			} else {
+				if (!empty($copyToAnotherApp)) {
+					$thisApp = DS.$this->app->dir.DS;
+					$anotherApp = DS.$copyToAnotherApp.DS;
+					$newTargetFile = str_replace($thisApp,$anotherApp,$targetFile);
+					$newPath = pathinfo($newTargetFile,PATHINFO_DIRNAME);
+					if (!file_exists($newPath)) {
+						mkdir($newPath,0755,true);
+					}
+					copy($targetFile,$newTargetFile);
+				}
+				
+				
 				header('content-type:text/json');
 				if (!empty($uploadDir)) {
 					$uploadDir = $this->request->data['uploadDir'].DS;
 				}
-				$filename = 'asset'.DS.'uploads'.DS.$uploadDir.$time . $_FILES['file']['name'];
+				$filename = fixQuirks('asset'.DS.'uploads'.DS.$uploadDir.$time . $_FILES['file']['name']);
 				echo $filename;
 				exit;	
 			}

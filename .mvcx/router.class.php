@@ -29,14 +29,18 @@ class Router extends Base {
 		header('Location: '.$url);
 	}
 	
-	public function getCurrentUrl() {
+	public function getCurrentUrl($back='') {
 		$protocol = '//';
 		$host = returnine($_SERVER['HTTP_HOST']);
 		$uri = returnine($_SERVER['REQUEST_URI']);
 		if (!empty($_SERVER['SERVER_PROTOCOL'])) {
 			$protocol = (stripos($_SERVER['SERVER_PROTOCOL'],'https') === false) ? 'http://' : 'https://';
 		}
-		return "$protocol$host$uri";
+		$url = "$protocol$host$uri";
+		if ($back == '..') {
+			$url = substr($url,0,strrpos($url,'/'));
+		}
+		return $url;
 	}
 	
 	public function setAutoPersist($controller) {
@@ -53,32 +57,34 @@ class Router extends Base {
 			$this->controllerObject->set('persistence',$data);
 		}
 		if (!empty($this->args[0]) && $persistAction == 'edit') {
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
 			if ($controller->autoPersist['validate'] !== true) {
 				if(!empty($controller->autoPersist['validate']['ifempty'])) {
 					$msg = $controller->autoPersist['flash']['ifempty'];
 				}
 				$persistVars = returnine($_POST,false);
-				$this->session->flashNotification($msg,'danger',$this->getCurrentUrl(),$persistVars);
+				$this->session->flashNotification($msg,'danger',$redirect,$persistVars);
 				return;
 			}
 			if ($this->controllerObject->parentEdit($this->args[0])) {
 				$persistVars = $this->modelObject->getAllById($this->args[0]);
-				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$this->getCurrentUrl(),$persistVars);
+				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$redirect,$persistVars);
 				return;
 			}
 		}
 		if ($persistAction == 'add') {			
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
 			if ($controller->autoPersist['validate'] !== true) {
 				if(!empty($controller->autoPersist['validate']['ifempty'])) {
 					$msg = $controller->autoPersist['flash']['ifempty'];
 				}
 				$persistVars = returnine($_POST,false);
-				$this->session->flashNotification($msg,'danger',$this->getCurrentUrl(),$persistVars);
+				$this->session->flashNotification($msg,'danger',$redirect,$persistVars);
 				return;
 			}
 			if ($this->controllerObject->parentAdd()) {
 				$persistVars = returnine($_POST,false);
-				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$this->getCurrentUrl(),$persistVars);
+				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$redirect,$persistVars);
 				return;
 			}
 

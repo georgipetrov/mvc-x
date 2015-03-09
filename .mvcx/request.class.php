@@ -3,10 +3,13 @@
 class Request {
 
 	public $data;
+	public $post;
+	public $put;
 
 	function __construct() {
-		$data = $_REQUEST;
-		$this->data = $data;
+		$this->data = returnine($_REQUEST,array());
+		$this->post = returnine($_POST,array());
+		$this->put = returnine($_PUT,array());
 	}
 	
 	public function isPost() {
@@ -32,6 +35,5 @@ class Request {
 			return $this->data;	
 		}
 	}
-
-
+	
 }
