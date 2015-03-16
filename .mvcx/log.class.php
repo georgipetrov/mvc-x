@@ -53,10 +53,10 @@ class Log {
 
         if (is_array($key)) {
             foreach ($key as $k=>$v) {
-                $logs[$k] = $v;
+                $logs[] = array($k, $v);
             }
         } else {
-            $logs[$key] = $value;
+            $logs[] = array($key, $value);
         }
     }
 
