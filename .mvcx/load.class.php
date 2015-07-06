@@ -10,7 +10,7 @@ class Load extends Base {
         if (!file_exists($path)) {
             throw new ModelNotFoundException('Model ' . $name . ' not found in ' . dirname($path));
         }
-        include $path;
+        require_once $path;
         $themodel = new $name($this->registry);
         $this->$name = $themodel;
         $this->router->modelObject = $themodel;
@@ -29,6 +29,14 @@ class Load extends Base {
 
     }
 
+    public function x($x) {
+        $path = SITE_PATH.DS.'app'.DS.$this->app->dir.DS.DIRNAME_X.DS.trim($x, DS).'.php';
+        if (!file_exists($path)) {
+            throw new ExtensionNotFoundException('Extension ' . basename($path) . ' not found in ' . dirname($path));
+        }
+        require_once $path;
+    }
 }
 
 class ModelNotFoundException extends Exception {}
+class ExtensionNotFoundException extends Exception {}
