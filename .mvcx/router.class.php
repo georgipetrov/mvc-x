@@ -108,7 +108,7 @@ class Router extends Base {
             }
 		}
 		
-		include $this->file;
+		require_once $this->file;
 		$class = ucfirst($this->controller).'Controller';
 		$controller = new $class($this->registry);
 		$this->controllerObject = $controller;

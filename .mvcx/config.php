@@ -10,5 +10,5 @@ foreach(glob(SITE_PATH.'/app/*', GLOB_ONLYDIR) as $dir) {
 		include $dir.'/config.php';
 	}
 }
-$app->config = $config;
+$app->configs = $config;
 
