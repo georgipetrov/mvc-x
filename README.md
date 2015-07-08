@@ -121,7 +121,11 @@ In order to auto-bind database table to model, you need to have your table under
 - `created` - date of entry created
 - `modified` - date of entry modified
 
-#### VI. Debugging
+#### VI. Using the x/ directory
+* * *
+The x/ directory is supposed to hold your app extensions, third party libraries and custom classes which do not fit anywhere else. Extensions may provide their MVC structure as if they are mini mvc-x applications. Their controllers must extend the **XController** class. If you want to load a custom class or third party library from the current app controller, you can include the needed files by just calling `$this->load->x('lib_filename');`. This will look for a file named *lib_filename.php* in the x/ directory and include it if it exists. You can also load files found in sub-directories like this `$this->load->x('third_party_lib/a_dir/filename');` and this will look for the file *filename.php* inside the *x/third_party_lib/a_dir/* directory.
+
+#### VII. Debugging
 * * *
 The following techniques are available for debugging.
 
@@ -132,3 +136,9 @@ This will output a variable, array or object of your choice in well-formatted ma
 `debug_mode=>true`
 
 This is a setting in the config.php of your app, which when enabled will produce useful debug information at the bottom of every page.
+
+You can also use `$this->log->debug('my_var', $var);` to add to the debug info in the bottom of the pages. The `debug()` method supports several formats:
+
+- `$this->log->debug($key, $value)`
+- `$this->log->debug($arr)` - where $arr is an associative array. If this form is used each item will be printed as a separate entry in the debug log
+- `$this->log->debug(compact($value))` - this is actually very similar to the first example, but the $key will be automatically set to the variable's name
