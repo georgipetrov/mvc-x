@@ -102,7 +102,8 @@ class Router extends Base {
 
 		if (db::table_exists($this->controller)) {
             try {
-                $this->load->model($this->controller);
+                $m = $this->load->model($this->controller);
+                $this->modelObject = $m;
             } catch (ModelNotFoundException $e) {
                 $this->log->debug('ModelNotFound', $e->getMessage(), NOTICE_DEBUG_GROUP);
             }

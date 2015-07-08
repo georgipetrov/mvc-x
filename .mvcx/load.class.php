@@ -13,7 +13,7 @@ class Load extends Base {
         require_once $path;
         $themodel = new $name($this->registry);
         $this->$name = $themodel;
-        $this->router->modelObject = $themodel;
+        return $themodel;
     }
 
     public function view($name, $echo = true, $smart_elements = true) {

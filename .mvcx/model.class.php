@@ -15,7 +15,8 @@ abstract class Model extends Base {
 		$this->tableprefix = $this->app->dbconfig['table_prefix'];
 		$this->dbname = $this->app->dbconfig['name'];
         if (empty($this->table)) {
-            $this->table = $this->app->router->controller;
+            $table_name = strtolower(get_class($this));
+            $this->table = $table_name;
         }
 	}
 	

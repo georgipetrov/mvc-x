@@ -102,7 +102,7 @@ This saves an array of data, exactly the same way as save(), with the only diffe
 
 Returns the id of the last inserted database table row.
 
-**_Note!_** By default models are connected to the controller's name. So if you are loading the **User** model while the current controller is **Blog**, the model will try to work on the **blog** database table instead of **user**. You can specify the model's table by adding a $table property to the class definition like this
+**_Note!_** By default models are connected to the model's class name in lowercase. However, you can manually specify the model's table by adding a $table property to the class definition like this
 
 ```
 class Blog extends Model {
