@@ -143,6 +143,20 @@ class View extends Base {
                     }
                     $view_name = 'element'.DS.$m[0].DS.$m[1];
 
+                    //load element's controller
+                    $controller_dir = preg_replace('@view/.*?' . $this->name . '\.tpl$@', '', $path);
+                    $view_controller = $controller_dir . 'controller' . DS . $view_name . '.php';
+                    if (file_exists($view_controller)) {
+                        require_once $view_controller;
+                        $className = ucfirst(strtolower($m[0])).ucfirst(strtolower($m[1])).'Controller';
+                        $controller_obj = new $className($this->registry);
+                        if (is_callable(array($controller_obj, 'beforeRender'))) {
+                            $this->view_vars = array();
+                            $controller_obj->beforeRender();
+                            $view_vars = array_merge($view_vars, $this->view_vars);
+                        }
+                    }
+
                     $view = new View($this->registry, $view_name, $view_vars, $this->smart_elements);
                     $viewcontent = $view->render();
                     $content = str_replace($match,$viewcontent,$content);
@@ -152,6 +166,9 @@ class View extends Base {
         } 
 
         return $content;
+    }
+
+    private function getControllerDir($view_path) {
     }
 }
 

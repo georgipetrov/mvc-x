@@ -11,11 +11,6 @@ abstract class Controller extends Base {
 		$this->action = $this->app->router->action;
 	}
 	
-	/**
-	 * @all controllers must contain an index method
-	 */
-	abstract function index();
-	
 	function set($key, $value='') {
         if (!is_array($this->view_vars)) $this->view_vars = array();
 

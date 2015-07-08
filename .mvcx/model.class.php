@@ -12,8 +12,8 @@ abstract class Model extends Base {
 	
 	function __construct($registry) {
         parent::__construct($registry);
-		$this->tableprefix = $this->app->dbconfig['table_prefix'];
-		$this->dbname = $this->app->dbconfig['name'];
+		$this->tableprefix = !empty($this->app->dbconfig['table_prefix']) ? $this->app->dbconfig['table_prefix'] : '';
+		$this->dbname = !empty($this->app->dbconfig['name']) ? $this->app->dbconfig['name'] : '';
         if (empty($this->table)) {
             $table_name = strtolower(get_class($this));
             $this->table = $table_name;

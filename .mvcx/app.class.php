@@ -108,6 +108,10 @@ class App {
             throw new AppNotFoundException('<h1>App not found for '.$_SERVER['HTTP_HOST'].'</h1><h2>Please create and configure at least one app for this site</h2>');
         }
 		
+        if (!empty($app['timezone'])) {
+            date_default_timezone_set($app['timezone']);
+        }
+
 		return $app;
 	}
 

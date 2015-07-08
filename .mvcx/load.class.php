@@ -26,7 +26,6 @@ class Load extends Base {
         } else {
             return $content;
         }
-
     }
 
     public function x($x) {

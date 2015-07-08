@@ -35,12 +35,18 @@ array(
 			'table_prefix'=>''
 		)
 	),
+	'timezone' => 'Europe/Sofia',
+	'template'=> false,
+	'smart_elements'=> true,
 	'debug_mode'=> 1
 );
 ```
  -   `url` - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  -   `dir` - the name of the app directory on your server e.g. mysite
  -   `db` - the database configuration of the app
+ -   `timezone` - The timezone for the app. Should be one of the specified [here](http://php.net/manual/en/timezones.php) By default the timezone is set to UTC
+ -   `template` - Accepts boolean or string. Specifies the name of the template you want to use. The template name should be a folder in /view/template/. If set to false, it will not use a template.
+ -   `smart_elements` - Accepts boolean. If true, the response will parse all smart elements. A smart element is e.g. [widget:breadcrumb]
  -   `debug_mode` - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
 
 As you can guess multiple db configurations are supported. When MVC-X boots it first looks for a configuration named **default**, if such is not found it will use the first one available. Later you can switch to a different configuration by simply calling `$this->app->setDb('{config_name}');`
@@ -125,7 +131,17 @@ In order to auto-bind database table to model, you need to have your table under
 * * *
 The x/ directory is supposed to hold your app extensions, third party libraries and custom classes which do not fit anywhere else. Extensions may provide their MVC structure as if they are mini mvc-x applications. Their controllers must extend the **XController** class. If you want to load a custom class or third party library from the current app controller, you can include the needed files by just calling `$this->load->x('lib_filename');`. This will look for a file named *lib_filename.php* in the x/ directory and include it if it exists. You can also load files found in sub-directories like this `$this->load->x('third_party_lib/a_dir/filename');` and this will look for the file *filename.php* inside the *x/third_party_lib/a_dir/* directory.
 
-#### VII. Debugging
+#### VII. Smart elements
+* * *
+Smart elements are a way to neatly include piece of code in your template. The idea is that you split your view parts into elements which you reuse in your pages. The elements can be widgets or blocks. They are standard *.tpl* files located in the `*view/element/{block, widget}/*` directory. If you want to use an element in your view, just add it like this:
+```
+<html_code_here>
+[block:nav]
+</html_code_here>
+```
+This will replace the string **[block:nav]** with the contents of the `*view/element/block/nav.tpl*` view. You can also pass variables to the views like this: `[block:nav title=My title]` then you can use the `$title` variable in the *nav.tpl* view. Smart elements can optionally have a controller which will be executed just before they are rendered. This can be useful if you want to populate the navigation with some links defined in a database. The controller needs to be placed in the `*controller/element/{block,widget}/*` directory. So the controller file for the **[block:nav]** element will be `*controller/element/block/nav.php*`. The class should be named **BlockNavController** and the method you need to define is **beforeRender()**. This is a standard controller, so you can use the `$this->set()` method to pass variables to the view.
+
+#### VIII. Debugging
 * * *
 The following techniques are available for debugging.
 
