@@ -133,13 +133,13 @@ The x/ directory is supposed to hold your app extensions, third party libraries 
 
 #### VII. Smart elements
 * * *
-Smart elements are a way to neatly include piece of code in your template. The idea is that you split your view parts into elements which you reuse in your pages. The elements can be widgets or blocks. They are standard *.tpl* files located in the `*view/element/{block, widget}/*` directory. If you want to use an element in your view, just add it like this:
+Smart elements are a way to neatly include piece of code in your template. The idea is that you split your view parts into elements which you reuse in your pages. The elements can be widgets or blocks. They are standard *.tpl* files located in the *`view/element/{block, widget}/`* directory. If you want to use an element in your view, just add it like this:
 ```
 <html_code_here>
 [block:nav]
 </html_code_here>
 ```
-This will replace the string **[block:nav]** with the contents of the `*view/element/block/nav.tpl*` view. You can also pass variables to the views like this: `[block:nav title=My title]` then you can use the `$title` variable in the *nav.tpl* view. Smart elements can optionally have a controller which will be executed just before they are rendered. This can be useful if you want to populate the navigation with some links defined in a database. The controller needs to be placed in the `*controller/element/{block,widget}/*` directory. So the controller file for the **[block:nav]** element will be `*controller/element/block/nav.php*`. The class should be named **BlockNavController** and the method you need to define is **beforeRender()**. This is a standard controller, so you can use the `$this->set()` method to pass variables to the view.
+This will replace the string **[block:nav]** with the contents of the *`view/element/block/nav.tpl`* view. You can also pass variables to the views like this: `[block:nav title=My title]` then you can use the `$title` variable in the *nav.tpl* view. Smart elements can optionally have a controller which will be executed just before they are rendered. This can be useful if you want to populate the navigation with some links defined in a database. The controller needs to be placed in the *`controller/element/{block,widget}/`* directory. So the controller file for the **[block:nav]** element will be *`controller/element/block/nav.php`*. The class should be named **BlockNavController** and the method you need to define is **beforeRender()**. This is a standard controller, so you can use the `$this->set()` method to pass variables to the view.
 
 #### VIII. Debugging
 * * *
