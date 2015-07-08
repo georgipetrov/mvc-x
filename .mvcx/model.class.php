@@ -14,7 +14,9 @@ abstract class Model extends Base {
         parent::__construct($registry);
 		$this->tableprefix = $this->app->dbconfig['table_prefix'];
 		$this->dbname = $this->app->dbconfig['name'];
-		$this->table = $this->router->controller;
+        if (empty($this->table)) {
+            $this->table = $this->app->router->controller;
+        }
 	}
 	
 	function query($query) {
@@ -166,10 +168,15 @@ abstract class Model extends Base {
 			if (isset($columns['created']) && !isset($entry['created'])) {
 				$entry['created'] =date("Y-m-d H:i:s");
 			}
-			$values = "'".implode("','",$entry)."'";
+			if (isset($columns['modified']) && !isset($entry['modified'])) {
+				$entry['modified'] =date("Y-m-d H:i:s");
+			}
+			$values = implode(', ', array_fill(0, count($entry), '?'));
 			$keys = "`".implode("`,`",array_keys($entry))."`";
 			$query = "INSERT INTO $db.$table ($keys) VALUES ($values)";
-			return $this->query($query);
+			//return $this->query($query);
+            $stmt = $this->app->dbinstance->prepare($query);
+            return $stmt->execute(array_values($entry));
 		} else {
 			if (isset($columns['modified']) && !isset($entry['modified'])) {
 				$entry['modified'] =date("Y-m-d H:i:s");
@@ -178,14 +185,14 @@ abstract class Model extends Base {
 			unset($entry['id']);
 			$keyvalues = '';
 			foreach ($entry as $k => $vals) {
-				$keyvalues .= "`$k`='$vals',";	
+				$keyvalues .= "`$k`=?,";//'$vals',";
 			}
 			$keyvalues = rtrim($keyvalues,',');
 
 			$query = "UPDATE `$db`.`$table` SET $keyvalues WHERE `id`='$id'";
-			return $this->query($query);
+            $stmt = $this->app->dbinstance->prepare($query);
+            return $stmt->execute(array_values($entry));
 		}
-		
 	}
 	
 	function lastId() {
