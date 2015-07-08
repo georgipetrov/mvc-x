@@ -7,7 +7,7 @@ foreach(glob('../app/*', GLOB_ONLYDIR) as $dir) {
 }
 include 'app.class.php';
 $app = new App;
-$app->config = $config;
+$app->configs = $config;
 $app_info =$app->getAppByUrl();
 $template = '';
 if ($app_info['template'] !== false && !empty($app_info['template'])) {

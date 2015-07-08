@@ -17,13 +17,14 @@ abstract class Controller extends Base {
 	abstract function index();
 	
 	function set($key, $value='') {
-        if (empty($this->view_vars)) $this->view_vars = array();
+        if (!is_array($this->view_vars)) $this->view_vars = array();
 
 		if (is_array($key)) {
 			$this->view_vars = array_merge($this->view_vars, $key);
 		} else {
 			$this->view_vars[$key] = $value;	
 		}
+		
 	}
 	
 	public function parentEdit($id) {

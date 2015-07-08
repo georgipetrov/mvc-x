@@ -8,11 +8,23 @@ class db {
 
 	public static function getInstance($db) {
 		if (!self::$instance) {
-			self::$instance = new PDO("$db[type]:host=$db[host];dbname=$db[name]", $db['username'], $db['password']);;
+            $dest_string = "$db[type]:host=$db[host]";
+            if (!empty($db['name'])) {
+                $dest_string .= ";dbname=$db[name]";
+            }
+			self::$instance = new PDO($dest_string, $db['username'], $db['password']);;
 			self::$instance-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 		return self::$instance;
 	}
+
+    public static function renewInstance($db) {
+        if (self::$instance) {
+            self::$instance = null;
+        }
+
+        return self::getInstance($db);
+    }
 	
 	public static function query($query) {
 		
