@@ -4,6 +4,7 @@ abstract class Controller extends Base {
 	public $autoPersist = false;
 	public $controller;
 	public $action;
+    public $smart_elements = true;
 
 	function __construct($registry) {
         parent::__construct($registry);

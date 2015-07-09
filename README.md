@@ -143,6 +143,8 @@ This will replace the string **[block:nav]** with the contents of the *`view/ele
 
 Threre are 2 special smart elements: `[widget:js]` and `[widget:css]` which are used to import CSS and JS resources. They are special because they are rendered last and they accept the parameter **position**. This allows you to use them multiple times and each one will have its own set of scripts/styles. For example you can place the JS widget in the header like this `[widget:js position=header]` and then in the footer like this `[widget:js position=footer]`. Then in any of your controllers (these include the elements' controllers), you can call `$this->addScript('path_to_script', 'header');` and this will add a script which will be displayed in the `[widget:js position=header]` widget. You can use any custom defined position for example `[widget:css position=the middle of the page]`. And yes, you can use spaces in the smart element's parameters without needing to quote the value. Actualy if you put quotes around it, they will be part of the value of the parameter.
 
+If you want to disable the smart elements parsing for a particular widget or block just write `$this->smart_elements = false;` in its controller `beforeRender()` method.
+
 #### VIII. Debugging
 * * *
 The following techniques are available for debugging.

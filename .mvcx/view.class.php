@@ -72,6 +72,7 @@ class View extends Base {
                 if (is_callable(array($controller_obj, 'beforeRender'))) {
                     $this->view_vars = $this->vars;
                     $controller_obj->beforeRender();
+                    $this->smart_elements = $controller_obj->smart_elements;
                     $this->vars = array_merge($this->vars, $this->view_vars);
                 }
             }
@@ -89,7 +90,7 @@ class View extends Base {
         $content = ob_get_contents();
         ob_end_clean();
 
-        if ($this->app->smart_elements == true && $this->smart_elements == true) {
+        if ($this->app->smart_elements && $this->smart_elements) {
             preg_match_all("/\[[^\]]*\]/", $content, $matches); //TODO: Test if this works with several elements on one line. May need to make the regex non-greedy and put a capture group
             if (!empty($matches[0])) {
 
