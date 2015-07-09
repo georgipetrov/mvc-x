@@ -20,11 +20,11 @@ class Load extends Base {
         $view_vars = $this->view_vars ? $this->view_vars : array();
         $view = new View($this->registry, $name, $view_vars, $smart_elements);
 
-        $content = $view->render();
+        $view->render();
         if ($echo == true) {
-            echo $content;
+            echo $view->getContent();
         } else {
-            return $content;
+            return $view->getContent();
         }
     }
 

@@ -119,6 +119,10 @@ class App {
         $config = $this->getDbConfig($config_key);
         $this->dbinstance = db::renewInstance($config);
     }
+
+    public function getConfig() {
+        return $this->config;
+    }
 	
 	private function getAppUriByUrl($url) {
 		$parts = explode(SITE_HOST,$url);

@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <title>TARS meets MVC-X</title>
 	[widget:favicon]
-	[widget:css]
+	[widget:css position=header]
+	[widget:js position=header]
   </head> 
   <body class="<?php echo $_BODYCLASS; ?>">

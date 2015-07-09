@@ -3,6 +3,7 @@
 		[widget:poweredby]
       </div>
     </footer>
-	[widget:js]
+	[widget:css position=footer]
+	[widget:js position=footer]
   </body>
 </html>

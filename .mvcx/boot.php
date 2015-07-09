@@ -7,11 +7,13 @@ include SITE_PATH . '/.mvcx/' . 'db.class.php';
 include SITE_PATH . '/.mvcx/' . 'lib.class.php';
 include SITE_PATH . '/.mvcx/' . 'controller.class.php';
 include SITE_PATH . '/.mvcx/' . 'xcontroller.class.php';
+include SITE_PATH . '/.mvcx/' . 'asset.class.php';
 include SITE_PATH . '/.mvcx/' . 'request.class.php';
 include SITE_PATH . '/.mvcx/' . 'session.class.php';
 include SITE_PATH . '/.mvcx/' . 'model.class.php';
 include SITE_PATH . '/.mvcx/' . 'app.class.php';
 include SITE_PATH . '/.mvcx/' . 'view.class.php';
+include SITE_PATH . '/.mvcx/' . 'subview.class.php';
 include SITE_PATH . '/.mvcx/' . 'log.class.php';
 
 $registry = new Registry();
