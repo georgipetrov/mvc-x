@@ -27,9 +27,19 @@ class Load extends Base {
 
         require_once $path;
         $themodel = new $name($this->registry);
+
         if (!empty($xconfig)) {
             $themodel->config = $xconfig;
         }
+
+        $installed_file = dirname($path) . DS . ".extension.installed";
+        if (!file_exists($installed_file)) {
+            if (is_callable(array($themodel, 'install'))) {
+                $themodel->install();
+                touch($installed_file);
+            }
+        }
+
         $this->$name = $themodel;
         return $themodel;
     }
