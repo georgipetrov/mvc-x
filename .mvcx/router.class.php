@@ -9,7 +9,7 @@ class Router extends Base {
 	public $controllerObject;
 	public $modelObject;
 	public $action;
-	public $extensions;
+	public $extensions = array();
 	
 	function __construct($registry) {
         parent::__construct($registry);
@@ -146,24 +146,20 @@ class Router extends Base {
 		}
 	}
 	
-	
-	
-	private function getExtensions($dir) {
-		$extension_paths = array();
-		if (file_exists($dir) && is_dir($dir)) {
-			foreach(glob($dir.'/*', GLOB_ONLYDIR) as $dir) {
-				if (file_exists($dir.'/xconfig.php')) {
-					$extension_paths[] = $dir;
-				} else {
-					foreach(glob($dir.'/*', GLOB_ONLYDIR) as $dir) {
-						if (file_exists($dir.'/xconfig.php')) {
-							$extension_paths[] = $dir;
-						}
-					}
-				}
-			}
-		}
-		return $extension_paths;
+	private function getExtensions() {
+        if (!$this->extensions) {
+            $dir = SITE_PATH.DS.'app'.DS.$this->app->dir.DS.DIRNAME_X;
+            $extension_paths = array();
+            if (file_exists($dir) && is_dir($dir)) {
+                foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)) as $filename) {
+                    if (basename($filename) == 'xconfig.php') {
+                        $extension_paths[] = dirname($filename);
+                    }
+                }
+            }
+            $this->extensions = $extension_paths;
+        }
+		return $this->extensions;
 	}
 
 	private function getController() {
@@ -209,13 +205,12 @@ class Router extends Base {
 		// graceful loading degradation X > APP > MVC core
 		
 		$tryorder = array(
-			'extensions' => SITE_PATH.DS.'app'.DS.$this->app->dir.DS.DIRNAME_X,
+			'extensions' => array(),
 			'app' => SITE_PATH.DS.'app'.DS.$this->app->dir,
 			'mvc' => SITE_PATH.DS.'.mvcx'.DS.'mvc'
 		);
 
 		$tryorder['extensions'] = $this->getExtensions($tryorder['extensions']);
-		$this->extensions = $tryorder['extensions'];
 
 		$filepath = '';
 		foreach ($tryorder as $try) {
