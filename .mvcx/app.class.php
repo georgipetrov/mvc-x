@@ -108,12 +108,20 @@ class App {
             throw new AppNotFoundException('<h1>App not found for '.$_SERVER['HTTP_HOST'].'</h1><h2>Please create and configure at least one app for this site</h2>');
         }
 		
+        if (!empty($app['timezone'])) {
+            date_default_timezone_set($app['timezone']);
+        }
+
 		return $app;
 	}
 
     public function setDb($config_key) {
         $config = $this->getDbConfig($config_key);
         $this->dbinstance = db::renewInstance($config);
+    }
+
+    public function getConfig() {
+        return $this->config;
     }
 	
 	private function getAppUriByUrl($url) {

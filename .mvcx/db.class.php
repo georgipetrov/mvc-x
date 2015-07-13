@@ -2,11 +2,12 @@
 class db {
 	private static $instance = NULL;
 	public static $log = array();
-	private function __construct() {
-
-	}
 
 	public static function getInstance($db) {
+        if (empty($db['type']) || empty($db['host']) || empty($db['username']) || empty($db['password'])) {
+            throw new Exception("Incomplete database details");
+        }
+
 		if (!self::$instance) {
             $dest_string = "$db[type]:host=$db[host]";
             if (!empty($db['name'])) {

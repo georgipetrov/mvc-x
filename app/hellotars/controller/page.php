@@ -6,6 +6,7 @@ class PageController extends Controller {
         $myArr = array('key1' => 1, 'key2' => 2);
         $this->log->debug('myVar', $myVar);
         $this->log->debug(compact('myArr'));
+        $this->log->debug('time', date('d M Y H:i:s'));
     }
 
     public function notifications() {

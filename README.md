@@ -35,12 +35,18 @@ array(
 			'table_prefix'=>''
 		)
 	),
+	'timezone' => 'Europe/Sofia',
+	'template'=> false,
+	'smart_elements'=> true,
 	'debug_mode'=> 1
 );
 ```
  -   `url` - here you should add your site public url without protocol and subdomain, e.g. mysite.com 
  -   `dir` - the name of the app directory on your server e.g. mysite
  -   `db` - the database configuration of the app
+ -   `timezone` - The timezone for the app. Should be one of the specified [here](http://php.net/manual/en/timezones.php) By default the timezone is set to UTC
+ -   `template` - Accepts boolean or string. Specifies the name of the template you want to use. The template name should be a folder in /view/template/. If set to false, it will not use a template.
+ -   `smart_elements` - Accepts boolean. If true, the response will parse all smart elements. A smart element is e.g. [widget:breadcrumb]
  -   `debug_mode` - If you enable debug mode, you will see debug information at the bottom of your page. To put this app in debug mode you need to set it to 1, otherwise leave it 0.
 
 As you can guess multiple db configurations are supported. When MVC-X boots it first looks for a configuration named **default**, if such is not found it will use the first one available. Later you can switch to a different configuration by simply calling `$this->app->setDb('{config_name}');`
@@ -125,7 +131,23 @@ In order to auto-bind database table to model, you need to have your table under
 * * *
 The x/ directory is supposed to hold your app extensions, third party libraries and custom classes which do not fit anywhere else. Extensions may provide their MVC structure as if they are mini mvc-x applications. Their controllers must extend the **XController** class. If you want to load a custom class or third party library from the current app controller, you can include the needed files by just calling `$this->load->x('lib_filename');`. This will look for a file named *lib_filename.php* in the x/ directory and include it if it exists. You can also load files found in sub-directories like this `$this->load->x('third_party_lib/a_dir/filename');` and this will look for the file *filename.php* inside the *x/third_party_lib/a_dir/* directory.
 
-#### VII. Debugging
+In order for an extension to be considered an extension it should have an xconfig.php file in its base directory. In that file you can have a variable named `$xconfig` wchich can be any valid PHP type and its value will be set to the extension's model in the config property. So in the model you are able to access the extension config through `$this->config`. If your extension needs some custom install logic (say you need to create some DB tables), you can do this in an **install()** method of the model. This method will be called only the first time the model is loaded.
+
+#### VII. Smart elements
+* * *
+Smart elements are a way to neatly include piece of code in your template. The idea is that you split your view parts into elements which you reuse in your pages. The elements can be widgets or blocks. They are standard *.tpl* files located in the *`view/element/{block, widget}/`* directory. If you want to use an element in your view, just add it like this:
+```
+<html_code_here>
+[block:nav]
+</html_code_here>
+```
+This will replace the string **[block:nav]** with the contents of the *`view/element/block/nav.tpl`* view. You can also pass variables to the views like this: `[block:nav title=My title]` then you can use the `$title` variable in the *nav.tpl* view. Smart elements can optionally have a controller which will be executed just before they are rendered. This can be useful if you want to populate the navigation with some links defined in a database. The controller needs to be placed in the *`controller/element/{block,widget}/`* directory. So the controller file for the **[block:nav]** element will be *`controller/element/block/nav.php`*. The class should be named **BlockNavController** and the method you need to define is **beforeRender()**. This is a standard controller, so you can use the `$this->set()` method to pass variables to the view.
+
+Threre are 2 special smart elements: `[widget:js]` and `[widget:css]` which are used to import CSS and JS resources. They are special because they are rendered last and they accept the parameter **position**. This allows you to use them multiple times and each one will have its own set of scripts/styles. For example you can place the JS widget in the header like this `[widget:js position=header]` and then in the footer like this `[widget:js position=footer]`. Then in any of your controllers (these include the elements' controllers), you can call `$this->addScript('path_to_script', 'header');` and this will add a script which will be displayed in the `[widget:js position=header]` widget. You can use any custom defined position for example `[widget:css position=the middle of the page]`. And yes, you can use spaces in the smart element's parameters without needing to quote the value. Actualy if you put quotes around it, they will be part of the value of the parameter.
+
+If you want to disable the smart elements parsing for a particular widget or block just write `$this->smart_elements = false;` in its controller `beforeRender()` method.
+
+#### VIII. Debugging
 * * *
 The following techniques are available for debugging.
 

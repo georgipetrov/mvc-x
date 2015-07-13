@@ -4,17 +4,13 @@ abstract class Controller extends Base {
 	public $autoPersist = false;
 	public $controller;
 	public $action;
+    public $smart_elements = true;
 
 	function __construct($registry) {
         parent::__construct($registry);
 		$this->controller = $this->app->router->controller;
 		$this->action = $this->app->router->action;
 	}
-	
-	/**
-	 * @all controllers must contain an index method
-	 */
-	abstract function index();
 	
 	function set($key, $value='') {
         if (!is_array($this->view_vars)) $this->view_vars = array();
@@ -24,8 +20,75 @@ abstract class Controller extends Base {
 		} else {
 			$this->view_vars[$key] = $value;	
 		}
-		
 	}
+
+    private function addAsset(Asset $asset) {
+        if (!$this->app_assets) $this->app_assets = new SplObjectStorage();
+
+        $this->app_assets->attach($asset);
+    }
+
+    private function getAssets($type, $position = '', $attributes = array()) {
+        $results = new SplObjectStorage();
+        if ($this->app_assets) {
+            foreach ($this->app_assets as $asset) {
+                if ($asset->getType() == $type) {
+                    if (!empty($position) && $asset->getPosition() != $position) continue;
+
+                    $match = true;
+                    foreach ($attributes as $k=>$v) {
+                        if ($asset->getAttrib($k) != $v) {
+                            $match = false;
+                            break;
+                        }
+                    }
+                    if ($match) {
+                        $results->attach($asset);
+                    }
+                }
+            }
+        }
+        return $results;
+    }
+	
+	public function addScript($script, $position = '') {
+        $asset = new Asset($this->registry, $script);
+        $asset->setType('script');
+        $asset->setAttrib('type', 'text/javascript');
+        $asset->setPosition($position);
+        $this->addAsset($asset);
+	}
+
+    public function getScripts($position = '') {
+        return $this->getAssets('script', $position);
+    }
+
+    public function addLink($href, $attribs = array(), $position = '') {
+        $asset = new Asset($this->registry, $href);
+        $asset->setType('link');
+        $asset->setPosition($position);
+        foreach ($attribs as $k=>$v) {
+            $asset->setAttrib($k, $v);
+        }
+        $this->addAsset($asset);
+    }
+
+    public function getLinks($position = '') {
+        return $this->getAssets('link', $position);
+    }
+
+	public function addStyle($href, $position = '', $attribs = array()) {
+        $attribs['rel'] = 'stylesheet';
+        if (!isset($attribs['type'])) {
+            $attribs['type'] = 'text/css';
+        }
+
+        $this->addLink($href, $attribs, $position);
+	}
+
+    public function getStyles($position = '') {
+        return $this->getAssets('link', $position, array('rel' => 'stylesheet'));
+    }
 	
 	public function parentEdit($id) {
 		if (!empty($_POST) && !(empty($id))) {
