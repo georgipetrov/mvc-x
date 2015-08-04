@@ -53,6 +53,7 @@ class Router extends Base {
 		}
 		if (!empty($this->args[0]) && $persistAction == 'view') {
 			$data = $this->modelObject->getAllById($this->args[0]);
+			$data = (isset($data[0])) ? $data[0] : array();
 			$this->controllerObject->set($data);
 			$this->controllerObject->set('persistence',$data);
 		}
@@ -67,8 +68,9 @@ class Router extends Base {
 				return;
 			}
 			if ($this->controllerObject->parentEdit($this->args[0])) {
-				$persistVars = $this->modelObject->getAllById($this->args[0]);
-				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$redirect,$persistVars);
+				$data = $this->modelObject->getAllById($this->args[0]);
+				$data = (isset($data[0])) ? $data[0] : array();
+				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$redirect,$data);
 				return;
 			}
 		}

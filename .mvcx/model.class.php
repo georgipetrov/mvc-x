@@ -24,9 +24,6 @@ abstract class Model extends Base {
 		$stmt = db::query($query);
 		if (stripos($query,'select ') !== false || stripos($query,'show ') !== false) {
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			if (count($result) == 1) {
-				return array_pop($result);
-			}
 			return $result;
 		}
 		return $stmt;
@@ -68,6 +65,7 @@ abstract class Model extends Base {
 			$fields = '*';
 			$limit = '';
 			$order = '';
+			$group = '';
 			$query = '';
 			$easyquery = str_replace('get','',$easyquery);
 			
@@ -78,9 +76,45 @@ abstract class Model extends Base {
 				$query = "SELECT $fields FROM `$db`.`$table` ";
 			}
 			
+			if (isset($parts[1]) && strpos($parts[1],'Orderby') !== false) {
+				$easyquery = str_replace('Orderby','Sortby',$easyquery);
+			}
+			
+			if (isset($parts[1]) && strpos($parts[1],'Sortby') !== false) {
+				$direction = "";
+				$sortparts = explode('Sortby',$parts[1]);
+				$parts[1] = $sortparts[0];
+
+				if (strpos($sortparts[1],'Asc') !== false) {
+					$direction = " ASC";
+					$sortparts[1] = str_replace("Asc","",$sortparts[1]);
+				}
+				if (strpos($sortparts[1],'Desc') !== false) {
+					$direction = " DESC";
+					$sortparts[1] = str_replace("Desc","",$sortparts[1]);
+				}	
+				if (!empty($sortparts[1])) {
+					$cwordparts = preg_split('/(?=[A-Z])/', $sortparts[1], -1, PREG_SPLIT_NO_EMPTY);
+					$column = strtolower(implode('_',$cwordparts));
+					$order = " ORDER BY `".$column."`".$direction;
+				}
+			}
+			
+			if (isset($parts[1]) && strpos($parts[1],'Groupby') !== false) {
+				$direction = "";
+				$sortparts = explode('Groupby',$parts[1]);
+				$parts[1] = $sortparts[0];
+				if (!empty($sortparts[1])) {
+					$cwordparts = preg_split('/(?=[A-Z])/', $sortparts[1], -1, PREG_SPLIT_NO_EMPTY);
+					$column = strtolower(implode('_',$cwordparts));
+					$group = " GROUP BY `".$column."`";
+				}
+			}
+			
 			if (isset($parts[1])) { 
 				$ands =  preg_split( "/(And|Or)/", $parts[1] );
 				$where = 'WHERE ';
+				
 				foreach ($ands as $k => $and) {
 					$cwordparts = preg_split('/(?=[A-Z])/', $and, -1, PREG_SPLIT_NO_EMPTY);
 					$column = strtolower(implode('_',$cwordparts));
@@ -101,10 +135,13 @@ abstract class Model extends Base {
 					$value = str_replace(array('>','<','<>','!='),'',$value);
 					$q = (is_numeric($value)) ? '' : '"';
 					$where .= "`$table`.`$column` $sign $q$value$q $andword";
+					
 				}
 				$query .= $where;
 			}
 			
+			$query .= $group;
+			$query .= $order;
 			return $this->query($query);
 
 		}
