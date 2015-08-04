@@ -84,6 +84,19 @@ Returns a list of blog titles published by user with id = 12
 `$this->blog->getTitleAndContentByUserAndStatus(12, true);`
 Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12
 
+`$this->blog->getTitleAndContentByUserAndStatusGroupbyAuthor(12, true);`
+Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12 and grouped by `author` column
+
+`$this->blog->getTitleAndContentByUserAndStatusGroupbyAuthorSortbyCreated(12, true);`
+Returns a list of blog titles and content, from blog posts with active status, published by user with id = 12 and grouped by `author` column and sorted (ordered) by `created` date column. Sortby and Orderby are aliases and can be used interchangeably. 
+
+`$this->blog->getTitleAndContentByUserAndStatusGroupbyAuthorSortbyCreatedDesc(12, true);`
+The same as the previous example, as it sorts the results in descending direction. 
+
+`$this->blog->getTitleAndContentByUserAndStatusGroupbyAuthorSortbyCreatedAsc(12, true);`
+The same as the previous example, as it sorts the results in ascending direction. 
+
+
 ##### Database query
 
 A normal query can be accomplished using your DB engine syntax. In this example, we are selecing all blog posts using MySQL. The returned result will be an array of posts.
