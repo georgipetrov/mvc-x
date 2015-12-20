@@ -67,6 +67,10 @@ class Router extends Base {
 				$this->session->flashNotification($msg,'danger',$redirect,$persistVars);
 				return;
 			}
+			$data = $this->modelObject->getAllById($this->args[0]);
+			$data = (isset($data[0])) ? $data[0] : array();
+			$this->controllerObject->set($data);
+			$this->controllerObject->set('persistence',$data);
 			if ($this->controllerObject->parentEdit($this->args[0])) {
 				$data = $this->modelObject->getAllById($this->args[0]);
 				$data = (isset($data[0])) ? $data[0] : array();
