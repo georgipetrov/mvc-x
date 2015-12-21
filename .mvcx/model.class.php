@@ -186,7 +186,7 @@ abstract class Model extends Base {
 			$entry['ua'] = $_SERVER['HTTP_USER_AGENT'];
 		}
 		if (isset($columns['ip']) && !isset($entry['ip'])) {
-			$entry['ip'] = $this->app->lib->getIp();
+			$entry['ip'] = $this->lib->getIp();
 		}
 		
 		foreach($entry as $k=> $e) {

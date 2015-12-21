@@ -40,6 +40,10 @@ class Router extends Base {
 		if ($back == '..') {
 			$url = substr($url,0,strrpos($url,'/'));
 		}
+		if ($back == '../..') {
+			$url = substr($url,0,strrpos($url,'/'));
+			$url = substr($url,0,strrpos($url,'/'));
+		}
 		return $url;
 	}
 	
@@ -58,7 +62,7 @@ class Router extends Base {
 			$this->controllerObject->set('persistence',$data);
 		}
 		if (!empty($this->args[0]) && $persistAction == 'edit') {
-			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('../..'));
 			if ($controller->autoPersist['validate'] !== true) {
 				if(!empty($controller->autoPersist['validate']['ifempty'])) {
 					$msg = $controller->autoPersist['flash']['ifempty'];
