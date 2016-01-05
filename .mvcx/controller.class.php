@@ -109,6 +109,16 @@ abstract class Controller extends Base {
 			return false;	
 		}
 	}
+
+	public function parentDelete($id='') {
+		$this->autoRender = false;
+		if (!empty($id)) {
+			$model = $this->controller;
+			return $this->$model->deleteEntry($id);	
+		} else {
+			return false;	
+		}
+	}
 	
 	public function validate($data=array(),$criteria=array()) {
 		if (empty($data) && ($this->request->isPost() || $this->request->isPut())) {
@@ -150,7 +160,8 @@ abstract class Controller extends Base {
 		if (empty($flash)) {
 			$flash = array(
 				'ifempty' => 'Please fill in all required fields',
-				'success' => 'Sucessfully saved!',
+				'success' => 'Successfully saved!',
+				'delete'  => 'Successfully deleted!',
 				'redirect' => ''
 			);
 		}

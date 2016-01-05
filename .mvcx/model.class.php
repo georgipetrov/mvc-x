@@ -188,7 +188,7 @@ abstract class Model extends Base {
 		if (isset($columns['ip']) && !isset($entry['ip'])) {
 			$entry['ip'] = $this->lib->getIp();
 		}
-		
+
 		foreach($entry as $k=> $e) {
 			if(!array_key_exists($k,$columns)) {
 				unset($entry[$k]);
@@ -230,6 +230,16 @@ abstract class Model extends Base {
 			$query = "UPDATE `$db`.`$table` SET $keyvalues WHERE `id`='$id'";
             $stmt = $this->app->dbinstance->prepare($query);
             return $stmt->execute(array_values($entry));
+		}
+	}
+	
+	function deleteEntry($id='') {
+		$db = $this->dbname;
+		$table = $this->tableprefix.$this->table;
+
+		if (!empty($id)) {
+			$this->query("DELETE FROM `$db`.`$table` WHERE `id` = $id");
+			return true;
 		}
 	}
 	

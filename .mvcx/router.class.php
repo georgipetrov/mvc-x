@@ -99,6 +99,15 @@ class Router extends Base {
 			}
 
 		}
+		if (!empty($this->args[0]) && $persistAction == 'delete') {			
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('../..'));
+			if ($this->controllerObject->parentDelete($this->args[0])) {
+				$persistVars = array('id'=>$this->args[0]);
+				$this->session->flashNotification($controller->autoPersist['flash']['delete'],'success',$redirect,$persistVars);
+				return;
+			}
+
+		}
 
 	}
 
