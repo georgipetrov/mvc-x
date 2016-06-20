@@ -1,4 +1,5 @@
 <?php
+
 class View extends Base {
     protected $name;
     protected $vars;
@@ -33,6 +34,7 @@ class View extends Base {
             $length = strlen($child->getMatchStr());
             $this->content = substr_replace($this->content, $subview_content, $start, $length);
         }
+
         return $this->content;
     }
 
@@ -44,7 +46,7 @@ class View extends Base {
         }
 
         if (!isset($_BASEHREF)) { 
-            $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+            $protocol = $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://';
             $_BASEHREF = $protocol.$this->app->url.'/';
         }
         $_DEBUG = '';
@@ -89,7 +91,7 @@ class View extends Base {
         include $path;
         $content = ob_get_contents();
         ob_end_clean();
-
+	
         if ($this->app->smart_elements && $this->smart_elements) {
             preg_match_all("/\[[^\]]*\]/", $content, $matches); //TODO: Test if this works with several elements on one line. May need to make the regex non-greedy and put a capture group
             if (!empty($matches[0])) {
@@ -110,7 +112,14 @@ class View extends Base {
 
                             foreach ($vars[1] as $key=>$val) {
                                 if (isset($values[$key])) {
-                                    $view_vars[$val] = $values[$key];
+                                    $final_val = $values[$key];
+
+                                    if (strlen($final_val) && $final_val[0] == '{' && substr($final_val, -1) == '}') { // handle php code in {}
+                                        $php_var = trim($final_val, '{}');
+                                        $final_val = $this->execPhp($php_var, get_defined_vars());
+                                    }
+
+                                    $view_vars[$val] = $final_val;
                                 }
                             }
                         }
@@ -122,7 +131,12 @@ class View extends Base {
                     $view->setMatchStr($match);
                     $this->children->attach($view);
                     if ($m[0] != 'widget' || !in_array($m[1], array('js', 'css'))) {
-                        $view->render();
+                        try {
+                            $view->render();
+                        } catch (Exception $e) {
+                            $this->children->detach($view);
+                            unset($view);
+                        }
                     }
                 }
             }
@@ -130,6 +144,70 @@ class View extends Base {
 
         $this->rendered = true;
         $this->content = $content;
+    }
+
+    //remove this when finish tests
+    public function getRandomNum($low, $high) {
+        return mt_rand($low, $high);
+    }
+
+    public function getTestView($a = 5) {
+        return new testView($a);
+    }
+    //end of section to be removed
+
+    protected function &execPhp($code, $scope, $subject = NULL) {
+        $final_val = $code;
+
+        if (preg_match('/^([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?)\((.*?)\)$/', $code, $matches)) {//it's a function, yey!
+            $func = $matches[1];
+            $args = explode(',', str_replace(', ', ',', $matches[2]));
+            $arg_values = array();
+            foreach ($args as $arg) {
+                $val = &$this->execPhp($arg, $scope);
+                $arg_values[] = &$val;
+            }
+
+            $callable = $subject ? array($subject, $func) : $func;
+            if (is_callable($callable)) {
+                $final_val = call_user_func_array($callable, $arg_values);
+            }
+        } else {
+            $parts = explode('->', $code);
+
+            if (isset($scope[$parts[0]]) || $parts[0] == 'this') {
+                $final_val = $parts[0] == 'this' ? $this : $scope[$parts[0]];
+
+                if (count($parts) > 1) {
+                    array_shift($parts);
+
+                    foreach ($parts as $part) {
+                        if ($this->isPhpFunction($part)) {
+                            $final_val = $this->execPhp($part, $scope, $final_val);
+                        } else {
+                            if (is_array($final_val) && isset($final_val[$part])) {
+
+                                $final_val = $final_val[$part];
+
+                            } else if (is_object($final_val) && isset($final_val->$part)) {
+
+                                $final_val = $final_val->$part;
+
+                            } else {
+                                $final_val = NULL;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $final_val;
+    }
+
+    protected function isPhpFunction($code) {
+        return preg_match('/^([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*?)\((.*?)\)$/', $code);
     }
 
     protected function locateFile($type, $ext) {
@@ -159,6 +237,7 @@ class View extends Base {
 
         if (!file_exists($path)) {
             $path = SITE_PATH . DS . 'app'. DS .$this->app->dir . DS . $type . $template . DS . $this->name . '.' . $ext;
+            
             if (!file_exists($path)) {
                 $path = SITE_PATH . DS . '.mvcx' . DS . 'mvc' . DS . $type . $template . DS . $this->name . '.' . $ext;
             }
@@ -208,3 +287,4 @@ class View extends Base {
 }
 
 class ViewNotFoundException extends Exception {}
+class VarNotFoundException extends Exception {}

@@ -26,7 +26,7 @@ class Router extends Base {
 	}
 	
 	public function redirect($url) {
-		header('Location: '.$url);
+			header('Location: '.$url);
 	}
 	
 	public function getCurrentUrl($back='') {
@@ -34,7 +34,7 @@ class Router extends Base {
 		$host = returnine($_SERVER['HTTP_HOST']);
 		$uri = returnine($_SERVER['REQUEST_URI']);
 		if (!empty($_SERVER['SERVER_PROTOCOL'])) {
-			$protocol = (stripos($_SERVER['SERVER_PROTOCOL'],'https') === false) ? 'http://' : 'https://';
+			$protocol = $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://';
 		}
 		$url = "$protocol$host$uri";
 		if ($back == '..') {
@@ -83,15 +83,14 @@ class Router extends Base {
 			}
 		}
 		if ($persistAction == 'add') {			
-			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
-			if ($controller->autoPersist['validate'] !== true) {
-				if(!empty($controller->autoPersist['validate']['ifempty'])) {
-					$msg = $controller->autoPersist['flash']['ifempty'];
-				}
+			if (!empty($_POST) && $controller->autoPersist['validate'] == true && ($controller->validate() !== true)) {
+				$msg = $controller->autoPersist['flash']['ifempty'];
 				$persistVars = returnine($_POST,false);
-				$this->session->flashNotification($msg,'danger',$redirect,$persistVars);
+				$this->controllerObject->set('persistence',$_POST);
+				$this->session->flashNotification($msg,'danger',null,$persistVars);
 				return;
 			}
+			$redirect = returnine($controller->autoPersist['flash']['redirect'],$this->getCurrentUrl('..'));
 			if ($this->controllerObject->parentAdd()) {
 				$persistVars = returnine($_POST,false);
 				$this->session->flashNotification($controller->autoPersist['flash']['success'],'success',$redirect,$persistVars);
@@ -161,7 +160,11 @@ class Router extends Base {
 			$this->setAutoPersist($controller);
 		}
 		if ($controller->autoRender == true) {
-			$this->app->load->view($this->controller.DS.$this->action);
+			try {
+				$this->app->load->view($this->controller.DS.$this->action);
+			} catch (ViewNotFoundException $e) {
+				echo $e->getMessage(); exit;
+			}
 		}
 	}
 	

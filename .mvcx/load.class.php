@@ -5,7 +5,7 @@ class Load extends Base {
         parent::__construct($registry);
     }
 
-    public function model($name) {
+    public function model($name,$bequiet=false) {
         $path = '';
         foreach ($this->app->router->extensions as $ext_dir) {
             $model_file = $ext_dir . DS . 'model' . DS . $name . '.php';
@@ -22,6 +22,7 @@ class Load extends Base {
         }
 
         if (!file_exists($path)) {
+			if ($bequiet == true) return false;
             throw new ModelNotFoundException('Model ' . $name . ' not found in ' . dirname($path));
         }
 
@@ -48,11 +49,16 @@ class Load extends Base {
         $view_vars = $this->view_vars ? $this->view_vars : array();
         $view = new View($this->registry, $name, $view_vars, $smart_elements);
 
-        $view->render();
-        if ($echo == true) {
-            echo $view->getContent();
-        } else {
-            return $view->getContent();
+        try {
+            $view->render();
+
+            if ($echo == true) {
+                echo $view->getContent();
+            } else {
+                return $view->getContent();
+            }
+        } catch (ViewNotFoundException $e) {
+            echo $e->getMessage(); exit;
         }
     }
 

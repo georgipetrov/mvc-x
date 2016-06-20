@@ -9,6 +9,7 @@ abstract class Model extends Base {
 	protected $table;
 	protected $tableprefix;
 	protected $tablecolumns = array();
+	protected $paginate = false;
 	
 	function __construct($registry) {
         parent::__construct($registry);
@@ -58,8 +59,14 @@ abstract class Model extends Base {
 	}
 	
 	function easyQuery($easyquery, $args) {
-		
-		if (strpos($easyquery,'get') !== false) {
+		$paginate = false;
+		if (strpos($easyquery,'paginate') === 0) { // Found
+			$paginate = true;
+			$easyquery = str_replace('paginate','get',$easyquery);
+		}
+		if (strpos($easyquery,'select') === 0) $easyquery = str_replace('select','get',$easyquery);
+		if (strpos($easyquery,'find') === 0) $easyquery = str_replace('find','get',$easyquery);
+		if (strpos($easyquery,'get') === 0) { // Found
 			$db = $this->dbname;
 			$table = $this->tableprefix.$this->table;
 			$fields = '*';
@@ -68,7 +75,7 @@ abstract class Model extends Base {
 			$group = '';
 			$query = '';
 			$easyquery = str_replace('get','',$easyquery);
-			
+
 			$parts = explode('By',$easyquery);
 			if (isset($parts[0])) { 
 				// There is no 'By'
@@ -76,10 +83,45 @@ abstract class Model extends Base {
 				$query = "SELECT $fields FROM `$db`.`$table` ";
 			}
 			
+			if (empty($parts[1]) && strpos($parts[0],'by')) {
+				$direction = "";
+				$sortparts = explode('Sortby',$parts[0]);
+				$parts[0] = $sortparts[0];
+
+				if (strpos($sortparts[1],'Asc') !== false) {
+					$direction = " ASC";
+					$sortparts[1] = str_replace("Asc","",$sortparts[1]);
+				}
+				if (strpos($sortparts[1],'Desc') !== false) {
+					$direction = " DESC";
+					$sortparts[1] = str_replace("Desc","",$sortparts[1]);
+				}	
+				if (!empty($sortparts[1])) {
+					$cwordparts = preg_split('/(?=[A-Z])/', $sortparts[1], -1, PREG_SPLIT_NO_EMPTY);
+					$column = strtolower(implode('_',$cwordparts));
+					$order = " ORDER BY `".$column."`".$direction;
+				}
+			}
+			
 			if (isset($parts[1]) && strpos($parts[1],'Orderby') !== false) {
 				$easyquery = str_replace('Orderby','Sortby',$easyquery);
 			}
+
+			if (isset($parts[1]) && strpos($parts[1],'Groupby') !== false) { 
 			
+				$direction = "";
+				$sortparts = explode('Groupby',$parts[1]);
+				$parts[1] = $sortparts[0];
+				
+				if (!empty($sortparts[1])) {
+					$cwordparts = preg_split('/(?=[A-Z])/', $sortparts[1], -1, PREG_SPLIT_NO_EMPTY);
+					$column = strtolower(implode('_',$cwordparts));
+					$group = " GROUP BY `".$column."`";
+				}
+
+			}
+
+	
 			if (isset($parts[1]) && strpos($parts[1],'Sortby') !== false) {
 				$direction = "";
 				$sortparts = explode('Sortby',$parts[1]);
@@ -98,23 +140,13 @@ abstract class Model extends Base {
 					$column = strtolower(implode('_',$cwordparts));
 					$order = " ORDER BY `".$column."`".$direction;
 				}
+				
 			}
-			
-			if (isset($parts[1]) && strpos($parts[1],'Groupby') !== false) {
-				$direction = "";
-				$sortparts = explode('Groupby',$parts[1]);
-				$parts[1] = $sortparts[0];
-				if (!empty($sortparts[1])) {
-					$cwordparts = preg_split('/(?=[A-Z])/', $sortparts[1], -1, PREG_SPLIT_NO_EMPTY);
-					$column = strtolower(implode('_',$cwordparts));
-					$group = " GROUP BY `".$column."`";
-				}
-			}
-			
+	
 			if (isset($parts[1])) { 
 				$ands =  preg_split( "/(And|Or)/", $parts[1] );
 				$where = 'WHERE ';
-				
+		
 				foreach ($ands as $k => $and) {
 					$cwordparts = preg_split('/(?=[A-Z])/', $and, -1, PREG_SPLIT_NO_EMPTY);
 					$column = strtolower(implode('_',$cwordparts));
@@ -142,6 +174,29 @@ abstract class Model extends Base {
 			
 			$query .= $group;
 			$query .= $order;
+			
+			if ($paginate) {
+				$page_num = returnine($this->request->data['pagenumber'],1);
+				$results_per_page = returnine($this->paginate['results_per_page'],10);
+				$start = ($page_num-1)*$results_per_page;
+				$limit = " LIMIT $start, $results_per_page";
+				$this->paginate=false;
+				if (empty($group)) {
+					$query_count = str_replace(' * ', ' COUNT(*) ',$query);
+					$query_result = current($this->query($query_count));
+					$max_count = (int)@array_pop($query_result);
+				} else {
+					$max_count =count($this->query($query));	
+				}
+				$this->request->data['_paginate_current_page_number_'] = $page_num;
+				$this->request->data['_paginate_results_per_page_'] = $results_per_page;
+				$this->request->data['_paginate_total_page_number_'] = ceil($max_count/$results_per_page);				
+				$this->request->data['_paginate_all_results_count_'] = $max_count;	
+		
+			}
+            
+            $query .= $limit;
+
 			return $this->query($query);
 
 		}
@@ -150,10 +205,12 @@ abstract class Model extends Base {
 	function getColumns(){
 		$db = $this->dbname;
 		$table = $this->tableprefix.$this->table;
+
 		if (!empty($this->tablecolumns[$table])) {
 			return $this->tablecolumns[$table];
 		}
 		$result = $this->query("SHOW COLUMNS FROM $db.$table");
+
 		$columns = array();
 		foreach ($result as $r) {
 			$columns[$r['Field']] = $r['Type'];
@@ -231,6 +288,10 @@ abstract class Model extends Base {
             $stmt = $this->app->dbinstance->prepare($query);
             return $stmt->execute(array_values($entry));
 		}
+	}
+	
+	public function delete($id='') {
+		return $this->deleteEntry($id);	
 	}
 	
 	function deleteEntry($id='') {

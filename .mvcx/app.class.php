@@ -126,7 +126,7 @@ class App {
 	
 	private function getAppUriByUrl($url) {
 		$parts = explode(SITE_HOST,$url);
-		$parts[1] = trim($parts[1],'/');
+		$parts[1] = trim(@$parts[1],'/');
 		return (!empty($parts[1])) ? $parts[1] : '';
 	}
  

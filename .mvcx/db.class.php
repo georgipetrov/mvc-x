@@ -3,12 +3,12 @@ class db {
 	private static $instance = NULL;
 	public static $log = array();
 
-	public static function getInstance($db) {
-        if (empty($db['type']) || empty($db['host']) || empty($db['username']) || empty($db['password'])) {
+	public static function getInstance($db = false) {
+        if ($db !== false && (empty($db['type']) || empty($db['host']) || empty($db['username']) || empty($db['password']))) {
             throw new Exception("Incomplete database details");
         }
 
-		if (!self::$instance) {
+		if (!self::$instance && $db !== false) {
             $dest_string = "$db[type]:host=$db[host]";
             if (!empty($db['name'])) {
                 $dest_string .= ";dbname=$db[name]";
