@@ -13,7 +13,7 @@ class PageController extends Controller {
 
         if ($this->request->isPost()) {
 
-            $this->session->flashNotification($this->request->data('msg'),$this->request->data('status'),'/mvc-x/page/notifications');	
+            $this->session->flashNotification($this->request->data('msg'),$this->request->data('status'),'/page/notifications');	
 
         }
     }
