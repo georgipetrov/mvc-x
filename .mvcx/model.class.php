@@ -196,8 +196,25 @@ abstract class Model extends Base {
 			}
             
             $query .= $limit;
-
-			return $this->query($query);
+			
+			$query_result = $this->query($query);
+			$fullcolumns = $this->query("SHOW FULL COLUMNS FROM $table");
+			foreach ($fullcolumns as $col) {
+				if (!empty($col['Comment']) && !empty($col['Field']) && strpos($col['Comment'], '.') != false) {
+					$comment_exploded = explode('.',$col['Comment']);
+					$comment_table = $comment_exploded[0];
+					$comment_field = returnine($comment_exploded[1]);
+					if (empty($comment_field)) continue;
+					
+					foreach ($query_result as $k => $qr) {
+						$qr_field_value = $qr[$col['Field']];
+						$qr_query_result = $this->query("SELECT * FROM `".$this->tableprefix.$comment_table."` WHERE `".$comment_field."` = '".$qr_field_value."'");
+						$query_result[$k][$comment_table] = current($qr_query_result);
+					
+					}
+				}
+			}
+			return $query_result;
 
 		}
 	}
