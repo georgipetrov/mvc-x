@@ -208,8 +208,17 @@ abstract class Model extends Base {
 					
 					foreach ($query_result as $k => $qr) {
 						$qr_field_value = $qr[$col['Field']];
-						$qr_query_result = $this->query("SELECT * FROM `".$this->tableprefix.$comment_table."` WHERE `".$comment_field."` = '".$qr_field_value."'");
-						$query_result[$k][$comment_table] = current($qr_query_result);
+						if (strpos($qr_field_value,',') !== false) {
+							$qr_field_value = explode(',',trim(str_replace(array('[',']','{','}','"',''), '',$qr_field_value)));
+							$qr_query_result = array();
+							foreach ($qr_field_value as $qr_value_entry) {
+								$qr_query_result[] = current($this->query("SELECT * FROM `".$this->tableprefix.$comment_table."` WHERE `".$comment_field."` = '".$qr_value_entry."'"));
+							}
+						} else {
+							$qr_query_result = $this->query("SELECT * FROM `".$this->tableprefix.$comment_table."` WHERE `".$comment_field."` = '".$qr_field_value."'");
+							$qr_query_result = current($qr_query_result);
+						}
+						$query_result[$k][$comment_table] = $qr_query_result;
 					
 					}
 				}
