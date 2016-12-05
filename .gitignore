@@ -4,6 +4,7 @@ app/admin/
 app/config.php
 dwsync.xml
 config.php
+error.txt
 
 # Windows image file caches
 Thumbs.db

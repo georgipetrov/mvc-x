@@ -46,7 +46,7 @@ class View extends Base {
         }
 
         if (!isset($_BASEHREF)) { 
-            $protocol = $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://';
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']== 'on') ? 'https://' : 'http://';
             $_BASEHREF = $protocol.$this->app->url.'/';
         }
         $_DEBUG = '';
